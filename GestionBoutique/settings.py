@@ -1,6 +1,8 @@
 
 
 from pathlib import Path
+from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,21 +66,21 @@ WSGI_APPLICATION = 'GestionBoutique.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'GestionBoutique',
-        'HOST':'localhost',
-        'USER':'postgres',
-        'PASSWORD':'Jules',
-        'PORT':'5432',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('PORT'),
 
-       'OPTIONS': {
+        'OPTIONS': {
             'client_encoding': 'UTF8',  # Définit l'encodage en UTF-8
         }
 
-
-}
+    }
 }
 
 
