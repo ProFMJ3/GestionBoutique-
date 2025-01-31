@@ -72,9 +72,13 @@ DATABASES = {
         'USER':'postgres',
         'PASSWORD':'Jules',
         'PORT':'5432',
-        
 
-    }
+       'OPTIONS': {
+            'client_encoding': 'UTF8',  # Définit l'encodage en UTF-8
+        }
+
+
+}
 }
 
 
