@@ -7,6 +7,7 @@
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionBoutique/.env" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +87,7 @@
       <updated>1738402071915</updated>
       <workItem from="1738402193716" duration="2356000" />
       <workItem from="1738411424684" duration="1966000" />
-      <workItem from="1738594585676" duration="2180000" />
+      <workItem from="1738594585676" duration="2249000" />
     </task>
     <servers />
   </component>
