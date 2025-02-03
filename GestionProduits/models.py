@@ -69,63 +69,63 @@ NB:Si on prends une catégorie, on va avoir plusieurs articles et un article app
 
 #Model catégorie
 
-class Categorie(models.Models):
-    titre = models.CharField(max_length=255)
+class Categorie(models.Model):
+    titre = models.CharField(max_length=128)
     description = models.TextField()
+    image = models.ImageField(upload_to="ImagesCategories/", null=True, blank=True )
     dateAjout = models.DateTimeField(auto_now_add=True)
-
 
     class Meta:
-        verbose_name = "Categorie"
-        verbose_name_plural = "Categories"
-        ordering("-dateAjout")
-    def __init__(self):
+        ordering =['-dateAjout']
+
+    def __str__(self):
         return self.titre
 
-class Article(models.Models):
-    nom = models.CharField(max_length=255)
-    quantite = models.IntegerField()
-    image = models.ImageField(upload_to="imagesArticles/")
+
+#Classe Article 
+class Article(models.Model):
+    nom = models.CharField(max_length=128)
+    stock = models.PositiveBigIntegerField(default=1)
+    image = models.ImageField(upload_to="imagesArticles/", null=True, blank=True)
     prixUnitaire = models.DecimalField(max_digits=10, decimal_places=2)
     dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True)
+    #dateModification = models.DateTimeField(auto_now=True)
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Article"
-        verbose_name_plural = "Articles"
-        #ordering("-dateAjout")
         ordering=['-dateAjout']
-    def __str__(self):
-        return self.nom
 
-class Client(models.Models):
-    prenom = models.CharField(max_length=255)
-    nom = models.CharField(max_length=255)
-    adresse = models.TextField()
-    telephone = models.CharField(max_length=15)
+    def __str__(self):
+        return f"L'article {self.nom} a {self.stock} stock"
+
+
+class Client(models.Model):
+    nomClient = models.CharField(max_length=128, null=False)
+    adresse = models.TextField(null=True, blank=True)
+    telephone = models.CharField(max_length=15, null=True, blank=True)
     dateInscription = models.DateTimeField(auto_now_add=True)
 
 
+
+#classe panier
 class Panier(models.Model):
     dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    Achats = models.ManyToManyField(Client, trough="achats")
+    dateModification = models.DateTimeField(auto_now=True) 
+    achats = models.ManyToManyField(Client, through="Achat", related_name="panierClient")
 
-
-class achats(models.Model):
+#classe Achat
+class Achat(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="achatClient")
+    panier = models.ForeignKey(Panier, on_delete=models.CASCADE, related_name="achatClient")
     dateCommande = models.DateTimeField(auto_now_add=True)
-    quantite = models.IntegerField()
+    quantite = models.PositiveBigIntegerField(default=1)
     prixTotal = models.DecimalField(max_digits=10, decimal_places=2)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    panier = models.ForeignKey(Panier, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="achats")
+    
     class Meta:
         verbose_name = "Commande"
         verbose_name_plural = "Commandes"
-        ordering["-dateCommande"]
-
+        ordering = ["dateCommande"]
 
     def __str__(self):
-        return self.article.nom
+        return f"{self.Client.nomClient} a acheté {self.quantite} de {self.Article.nom} le {self.dateCommande}"

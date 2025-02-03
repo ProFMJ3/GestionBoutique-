@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/GestionBoutique.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Untitled.mdj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/diagrammes.mdj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionBoutique/.env" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionBoutique/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,7 +39,9 @@
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "git-widget-placeholder": "FMJ",
+    "last_opened_file_path": "D:/SEMESTRE3/INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211/PROGRAMME/GestionBoutique",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -54,10 +58,8 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DJANGO_SETTINGS_MODULE" value="GestionBoutique.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (GestionBancaire)" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -91,7 +93,8 @@
       <option name="presentableId" value="Default" />
       <updated>1738402071915</updated>
       <workItem from="1738402193716" duration="2356000" />
-      <workItem from="1738411424684" duration="1742000" />
+      <workItem from="1738411424684" duration="1966000" />
+      <workItem from="1738594585676" duration="1902000" />
     </task>
     <servers />
   </component>
