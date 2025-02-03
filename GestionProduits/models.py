@@ -107,7 +107,7 @@ class Client(models.Model):
 
 
 
-#classe panier
+#classe Panier
 class Panier(models.Model):
     dateAjout = models.DateTimeField(auto_now_add=True)
     dateModification = models.DateTimeField(auto_now=True) 
@@ -126,6 +126,7 @@ class Achat(models.Model):
         verbose_name = "Commande"
         verbose_name_plural = "Commandes"
         ordering = ["dateCommande"]
+
 
     def __str__(self):
         return f"{self.Client.nomClient} a acheté {self.quantite} de {self.Article.nom} le {self.dateCommande}"
