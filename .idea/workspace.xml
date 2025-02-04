@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/dash.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionBoutique/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutArticle.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutCategorie.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
     </list>
@@ -106,7 +97,7 @@
       <workItem from="1738402193716" duration="2356000" />
       <workItem from="1738411424684" duration="1966000" />
       <workItem from="1738594585676" duration="6262000" />
-      <workItem from="1738648366826" duration="8433000" />
+      <workItem from="1738648366826" duration="9195000" />
     </task>
     <servers />
   </component>

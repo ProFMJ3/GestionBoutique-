@@ -10,10 +10,12 @@ from .models import Categorie, Article
 # git config --global core.autocrlf true
 
 # Create your views here
+
+#LA VUE POUR AFFICHER ACCEUIL
 def acceuil(request):
     return render(request, 'acceuil.html')
 
-
+#LA VUE POUR AJOUTER UNE NOUVELLE CATEGORIE
 def ajoutCategorie(request):
     if request.method == 'POST':
         form = CategorieForm(request.POST, request.FILES)
@@ -33,7 +35,7 @@ def ajoutCategorie(request):
         form = CategorieForm()
 
     return render(request, 'ajoutCategorie.html', {'form': form})
-
+#LA VUE POUR SUPPRIMER UNE CATEGORIE
 def supprimerCateegorie(request, id):
     if request.method == 'GET':
         categorie = get_object_or_404(Categorie, id=id)
@@ -44,6 +46,7 @@ def supprimerCateegorie(request, id):
         return HttpResponse("Méthode non autorisée", status=405)
 
 
+#LA VUE POUR AJOUTER UN NOUVEAU ARTICLE
 
 def ajoutArticle(request):
     if request.method == 'POST':
@@ -67,7 +70,7 @@ def ajoutArticle(request):
         formArticle = ArticleForm()
     return render(request, 'ajoutArticle.html', {'formArticle': formArticle})
 
-
+#LA VUE POUR AFFICHER LES ARTICLES
 def listeArticle(request):
     articles = Article.objects.all()
 
@@ -80,6 +83,7 @@ def listeArticle(request):
     return render(request, "listeArticle.html", context)
 
 
+#LA VUE POUR AFFICHER LES CATEGORIE
 def listeCategorie(request):
     categories = Categorie.objects.all()
 
@@ -92,6 +96,7 @@ def listeCategorie(request):
     return render(request, 'listeCategorie.html', context)
 
 
+#LA VUE POUR SUPPRIMER UN ARTICLE
 def supprimerArticle(request, id):
     if request.method == 'GET':
         article = get_object_or_404(Article, id=id)
