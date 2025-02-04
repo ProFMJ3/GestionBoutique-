@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Produits</title>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+
+    <style>
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .product-image {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .btn-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .btn {
+            font-family: "Times New Roman", sans-serif;
+        }
+        .alert {
+            font-family: "Times New Roman", sans-serif;
+
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <h2 class="text-center">Liste des Produits</h2>
+        <div class="text-end mb-3">
+            <a href="{% url 'ajoutProduit' %}" class="btn btn-primary">Ajouter un produit</a>
+            <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
+        </div>
+        
+        <div class="row">
+            {% for produit in produits %}
+            <div class="col-md-4">
+                <div class="product-card">
+
+                    <h5>{{ produit.nom }}</h5>
+                    <p style="text-align: right;" ><strong></strong> {{ produit.dateAjout }}</p>
+                    <p><strong>Prix:</strong> {{ produit.prixUnitaire }} FCFA</p>
+
+                    <p><strong>Catégorie:</strong> {{ produit.categorie.nom }}</p>
+                    <p><strong>Stock:</strong> {{ produit.stock }}</p>
+
+                    {% if produit.image %}
+                    <img src="{{ produit.image.url }}" alt="Image de {{ produit.nom }}" style="max-width: 200px; max-height: 150px;" class="product-image">
+                    {% else %}
+                    <p><em>Aucune image disponible</em></p>
+                    {% endif %}
+                    <div class="btn-actions">
+                        <a href="#"  class="btn btn-warning">Modifier</a>
+                        <a href="{% url 'supprimerProduit' produit.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center">Aucun produit n'a été ajouté pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}" ></script>
+</body>
+</html>

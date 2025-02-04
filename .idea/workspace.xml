@@ -5,14 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/GestionProduits/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutArticle.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutCategorie.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionBoutique/.env" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionBoutique/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionBoutique/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,6 +45,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
     "Django Server.GestionBoutique.executor": "Run",
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -87,7 +105,8 @@
       <updated>1738402071915</updated>
       <workItem from="1738402193716" duration="2356000" />
       <workItem from="1738411424684" duration="1966000" />
-      <workItem from="1738594585676" duration="2249000" />
+      <workItem from="1738594585676" duration="6262000" />
+      <workItem from="1738648366826" duration="1924000" />
     </task>
     <servers />
   </component>

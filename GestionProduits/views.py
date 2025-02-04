@@ -1,67 +1,89 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib import messages
 
-# Create your views here.
+from .forms import CategorieForm, ArticleForm
 
-"""
-class Categorie(models.Models):
-    titre = models.CharField(max_length=255)
-    description = models.TextField()
-    dateAjout = models.DateTimeField(auto_now_add=True)
+from .models import Categorie, Article
 
 
-    class Meta:
-        verbose_name = "Categorie"
-        verbose_name_plural = "Categories"
-        ordering("-dateAjout")
-    def __init__(self):
-        return self.titre
+# git config --global core.autocrlf true
 
-class Article(models.Models):
-    nom = models.CharField(max_length=255)
-    quantite = models.IntegerField()
-    image = models.ImageField(upload_to="imagesArticles/")
-    prixUnitaire = models.DecimalField(max_digits=10, decimal_places=2)
-    dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True)
-    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Article"
-        verbose_name_plural = "Articles"
-        #ordering("-dateAjout")
-        ordering=['-dateAjout']
-    def __str__(self):
-        return self.nom
-
-class Client(models.Models):
-    prenom = models.CharField(max_length=255)
-    nom = models.CharField(max_length=255)
-    adresse = models.TextField()
-    telephone = models.CharField(max_length=15)
-    dateInscription = models.DateTimeField(auto_now_add=True)
+# Create your views here
+def acceuil(request):
+    return render(request, 'acceuil.html')
 
 
-class Panier(models.Model):
-    dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    Achats = models.ManyToManyField(Client, trough="achats")
+def ajoutCategorie(request):
+    if request.method == 'POST':
+        forms = CategorieForm(request.POST, request.FILES)
+        if forms.is_valid():
+            titre = forms.cleaned_data['titre']
+            description = forms.cleaned_data['description']
+            image = forms.cleaned_data['image']
+            categorie = Categorie(titre=titre, description=description, image=image)
+            categorie.save()
+            return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
+        else:
+            print(forms.errors)
+
+    else:
+        forms = CategorieForm()
+
+    return render(request, 'ajoutCategorie.html', {'forms': forms})
 
 
-class achats(models.Model):
-    dateCommande = models.DateTimeField(auto_now_add=True)
-    quantite = models.IntegerField()
-    prixTotal = models.DecimalField(max_digits=10, decimal_places=2)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    panier = models.ForeignKey(Panier, on_delete=models.CASCADE)
-    class Meta:
-        verbose_name = "Commande"
-        verbose_name_plural = "Commandes"
-        ordering["-dateCommande"]
+
+def ajoutArticle(request):
+    if request.method == 'POST':
+        forms = ArticleForm(request.POST, request.FILES)
+        if forms.is_valid():
+            nom = forms.cleaned_data['nom']
+            prixUnitaire = forms.cleaned_data['prixUnitaire']
+            categorie = forms.cleaned_data['categorie']
+            image = forms.cleaned_data['image']
+            stock = forms.cleaned_data['stock']
+
+            produit = ArticleForm(nom=nom, prixUnitaire=prixUnitaire, categorie=categorie, image=image, stock=stock)
+            produit.save()
+            return redirect('listeProduit')  # Redirection vers la page de liste des produits
+
+    else:
+        forms = ArticleForm()
+    return render(request, 'ajoutArticle.html', {'forms': forms})
 
 
-    def __str__(self):
-        return self.article.nom
+def listeArticle(request):
+    articles = Article.objects.all()
 
-"""
+    context = {"articles": articles}
+    if not articles.exists:
+        message = "Aucun produit n'est enregistré"
+
+        return render(request, "listeArticle.html", {"message": message})
+
+    return render(request, "listeArticle.html", context)
+
+
+def listeCategorie(request):
+    categories = Categorie.objects.all()
+
+    context = {"categories": categories}
+    if not categories.exists:
+        message = "Aucun produit n'est enregistré"
+
+        return render(request, 'listeCategorie.html', {"message": message})
+
+    return render(request, 'listeCategorie.html', context)
+
+
+def supprimerArticle(request, id):
+    if request.method == 'GET':
+        article = get_object_or_404(Article, id=id)
+        article.delete()
+        messages.success(request, f"{article.nom} a été supprimé avec succès")
+        return redirect('listeArticle')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
+def modifierArticle(request, id):
+    pass
