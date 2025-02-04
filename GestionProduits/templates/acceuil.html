@@ -2,9 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceuil</title>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <style>
+         .content{
+
+             width: 80%;
+             height: 100vh;
+             background-color: lightgray;
+             border:5px solid white;
+             border-radius: 15px;
+             margin: 20px auto 10px;
+             justify-content: center;
+             text-align: center;
+
+        }
+        .content h2{
+            color: blue;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+           .lien{
+
+                gap: 50px;
+                width: 60%;
+                justify-content:center ;
+                align-content: center;
+                background-color: gray;
+                border-radius: 15px;
+                margin: 20px auto 10px;
+        }
+    </style>
 </head>
 <body>
+
+    <div class="content">
+        <h2 class="" >Bienvenue Sur notre Plateforme !!</h2>
+        <div class="d-flex lien" >
+
+            <a href="{% url "ajoutCategorie" %}" class="btn btn-success">Nouveau Categorie</a>
+
+            <a href="{% url "ajoutArticle" %}" class="btn btn-success">Nouveau Article</a>
+            <a href="{% url "listeCategorie" %}" class="btn btn-secondary">Catégorie de mes Articles</a>
+            <a href="{% url "listeArticle" %}" class="btn btn-secondary">Mes Articles</a>
+
+
+
+        </div>
+
+    </div>
+    <script src="{% static 'assets/js/bootstrap.min.js' %}" ></script>
 
 </body>
 </html>

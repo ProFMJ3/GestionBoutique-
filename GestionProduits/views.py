@@ -16,41 +16,56 @@ def acceuil(request):
 
 def ajoutCategorie(request):
     if request.method == 'POST':
-        forms = CategorieForm(request.POST, request.FILES)
-        if forms.is_valid():
-            titre = forms.cleaned_data['titre']
-            description = forms.cleaned_data['description']
-            image = forms.cleaned_data['image']
+        form = CategorieForm(request.POST, request.FILES)
+        if form.is_valid():
+            titre = form.cleaned_data['titre']
+            description = form.cleaned_data['description']
+            image = form.cleaned_data['image']
+
             categorie = Categorie(titre=titre, description=description, image=image)
             categorie.save()
+            messages.success(request, "Catégorie ajoutée avec succès !")
             return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
         else:
-            print(forms.errors)
+            print(form.errors)
 
     else:
-        forms = CategorieForm()
+        form = CategorieForm()
 
-    return render(request, 'ajoutCategorie.html', {'forms': forms})
+    return render(request, 'ajoutCategorie.html', {'form': form})
+
+def supprimerCateegorie(request, id):
+    if request.method == 'GET':
+        categorie = get_object_or_404(Categorie, id=id)
+        categorie.delete()
+        messages.success(request, f"{categorie.titre} a été supprimé avec succès")
+        return redirect('listeArticle')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
 
 
 
 def ajoutArticle(request):
     if request.method == 'POST':
-        forms = ArticleForm(request.POST, request.FILES)
-        if forms.is_valid():
-            nom = forms.cleaned_data['nom']
-            prixUnitaire = forms.cleaned_data['prixUnitaire']
-            categorie = forms.cleaned_data['categorie']
-            image = forms.cleaned_data['image']
-            stock = forms.cleaned_data['stock']
+        formArticle = ArticleForm(request.POST, request.FILES)
+        if formArticle.is_valid():
+            nom = formArticle.cleaned_data['nom']
+            prixUnitaire = formArticle.cleaned_data['prixUnitaire']
+            categorie = formArticle.cleaned_data['categorie']
+            image = formArticle.cleaned_data['image']
+            stock = formArticle.cleaned_data['stock']
 
-            produit = ArticleForm(nom=nom, prixUnitaire=prixUnitaire, categorie=categorie, image=image, stock=stock)
-            produit.save()
-            return redirect('listeProduit')  # Redirection vers la page de liste des produits
+            article = Article(nom=nom,  stock=stock,  image=image, prixUnitaire=prixUnitaire, categorie=categorie)
+            article.save()
+            messages.success(request, f"{article.nom} a été Ajouté avec succès")
+            return redirect('listeArticle')  # Redirection vers la page de liste des produits
+        else:
+            print(formArticle.errors)
+
 
     else:
-        forms = ArticleForm()
-    return render(request, 'ajoutArticle.html', {'forms': forms})
+        formArticle = ArticleForm()
+    return render(request, 'ajoutArticle.html', {'formArticle': formArticle})
 
 
 def listeArticle(request):
@@ -85,5 +100,8 @@ def supprimerArticle(request, id):
         return redirect('listeArticle')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
     else:
         return HttpResponse("Méthode non autorisée", status=405)
+
+
+
 def modifierArticle(request, id):
     pass

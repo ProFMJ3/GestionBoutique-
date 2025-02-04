@@ -8,6 +8,7 @@ urlpatterns = [
     path('listeArticle/', views.listeArticle, name='listeArticle'),
     path('listeCategorie/', views.listeCategorie, name='listeCategorie'),
 
-    path('supprimerArticle/<int:id>/', views.supprimerArticle, name='supprimerProduit'),
+    path('supprimerArticle/<int:id>/', views.supprimerArticle, name='supprimerArticle'),
+    path('supprimerCategorie/<int:id>/', views.supprimerCateegorie, name='supprimerCategorie'),
 
 ]

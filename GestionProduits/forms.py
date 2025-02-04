@@ -12,6 +12,7 @@ class CategorieForm(forms.Form):
         'placeholder': 'Entrez une description',
         'rows': 5,
     }))
+
     image = forms.ImageField(label="Vous pouvez ajouter une image du produit :", required=True,
                              widget=forms.ClearableFileInput(attrs={
                                  'accept': 'image/*',
@@ -24,7 +25,7 @@ class ArticleForm(forms.Form):
     nom = forms.CharField(label="Nom du produit :", max_length=128, required=True, widget=forms.TextInput(attrs={
         'placeholder': 'Entrez le nom du produit',
     }))
-    prixUnitaire = forms.FloatField(label="Prix Unitaire du produit :", initial=0, required=True,
+    prixUnitaire = forms.DecimalField(label="Prix Unitaire du produit :", initial=0, required=True,
                                     widget=forms.TextInput(attrs={
                                         'placeholder': 'Entrez le prix du produit',
                                     }))

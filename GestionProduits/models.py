@@ -77,6 +77,8 @@ class Categorie(models.Model):
     dateAjout = models.DateTimeField(auto_now_add=True)
     dateModification = models.DateTimeField(auto_now=True)
 
+
+
     class Meta:
         ordering =['-dateAjout']
 

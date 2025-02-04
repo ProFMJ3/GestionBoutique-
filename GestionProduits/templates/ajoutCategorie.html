@@ -3,103 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Catégories</title>
+    <title>AJOUT</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
+      <style>
+
+        .w-50{
+            width: 50%;
         }
 
+        .content{
+            flex-direction: column;
+            background-color: lightgray;
+            border:10px solid white;
+            border-radius: 15px;
+            margin: 20px auto 10px;
+        }
 
+        input, textarea{
+            margin: auto;
+            border-radius: 10px;
+            width:80%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+        }
+        input:focus, textarea:focus{
+            border-color: blue;
+            outline: none;
+        }
 
-        .container {
-            margin: 20px auto;
-            width: 80%;
-            background-color: #fff;
-            padding: 20px;
+        textarea{
+            resize:none;
+        }
+        label{
+            margin: auto;
+            padding: 10px;
+            align-items: center;
+            font-family: "Times News romans", sans-serif;
+            font-weight: bold;
+            color:black;
+        }
+
+        .btn1{
+            font-family: "Times News romans", sans-serif;
+            padding: 10px;
+            width: 50%;
+            border-radius: 10px;
+            align-items: center;
+            justify-content:center;
+            font-size: 20px;
+            text-decoration: none;
+            align-content: center;
+            font-weight: bold;
+            color:white;
+            margin-bottom : 30px;
+            background-color: blue;
+            border-color: blue;
+
+        }
+
+        .btn1:hover{
+            background-color: darkblue;
+        }
+        .center{
+            margin-top: 20px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        h2{
+            margin-top: 20px;
+            text-align: center;
+            color:blue;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight:bold;
+        }
+
+        .btn-cont {
+            display: flex;
+            justify-content: space-between; /* Place les liens aux extrémités gauche et droite */
+            align-items: center;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: lightblue;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
-            text-align: center;
-            color: #007bff;
-            font-family: "Times New Roman", serif;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        table th, table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .btn-container {
-            text-align: right;
-            margin-bottom: 10px;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
+        .btn-acceuil a ,
+        .btn-liste a  {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
             text-decoration: none;
-            border-radius: 5px;
+            color: white;
+            background-color: #007bff;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .btn-primary:hover {
+        .btn-acceuil a:hover,
+        .btn-liste a:hover {
             background-color: #0056b3;
+            transform: scale(1.05); /* Légère augmentation de taille au survol */
         }
+
+
     </style>
 </head>
-<body>
-    <div class="container">
-        <h2>Liste des Catégories</h2>
 
-        <div class="btn-container">
-            <a href="{% url 'ajoutCategorie' %}" class="btn-primary">Ajouter une Catégorie</a>
-            <a href="{% url 'acceuil' %}" class="btn-primary">Accueil</a>
+<body>
+
+    <form action="{% url 'ajoutCategorie' %}" method="POST" enctype="multipart/form-data" >
+
+        <div class="btn-cont">
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                {{ form.errors }}
+            </div>
+            {% endif %}
+                <div class="btn-acceuil">
+                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
+                </div>
+
+                <div class="btn-liste">
+                    <a href=" {% url "listeCategorie" %} " class="btn btn-primary">Liste Catégorie</a>
+                </div>
+
+            </div>
+        <div class="content w-50 d-flex">
+
+            <h2>NOUVEAU CATEGORIE</h2>
+            {% csrf_token %}
+            {{ form }}
+
+            <div class="center">
+                <button type="submit" class="btn1 btn-primary">Ajouter</button>
+
+            </div>
+
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nom de la Catégorie</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for categorie in categories %}
-                    <tr>
-                        <td>{{ categorie.id }}</td>
-                        <td>{{ categorie.titre }}</td>
-                        <td>{{ categorie.description }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="3" style="text-align: center;">Aucune catégorie trouvée</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    </form>
 </body>
 </html>

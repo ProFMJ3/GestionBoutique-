@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Produits</title>
+    <title>RAISSA</title>
     {% load static %}
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
 
     <style>
+
+        .container{
+            background-color: lightblue;
+            font-family: "Times New Roman", sans-serif;
+            border-radius:10px;
+        }
         .product-card {
             border: 1px solid #ddd;
             border-radius: 10px;
@@ -47,9 +53,9 @@
             <p>{{ message }}</p>
             {% endfor %}
         {% endif %}
-        <h2 class="text-center">Liste des Produits</h2>
+        <h2 class="text-center">LES CATEGORIES</h2>
         <div class="text-end mb-3">
-            <a href="{% url 'ajoutProduit' %}" class="btn btn-primary">Ajouter un produit</a>
+            <a href="{% url 'ajoutCategorie' %}" class="btn btn-primary">Nouveau Catégorie</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
         </div>
 
@@ -58,24 +64,25 @@
             <div class="col-md-4">
                 <div class="product-card">
 
-                    <h5>{{ categorie.titre }}</h5>
+                    <h5>{{ categorie.titre}}</h5>
                     <p style="text-align: right;" ><strong></strong> {{ categorie.dateAjout }}</p>
-                    <p><strong>Prix:</strong> {{ categorie.description }} </p>
+
+                    <p><strong>Description:</strong> {{ categorie.description }}</p>
 
 
-                    {% if produit.image %}
+                    {% if categorie.image %}
                     <img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image">
                     {% else %}
                     <p><em>Aucune image disponible</em></p>
                     {% endif %}
                     <div class="btn-actions">
                         <a href="#"  class="btn btn-warning">Modifier</a>
-                        <a href="{% url 'supprimerProduit' produit.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger">Supprimer</a>
+                        <a href="{% url 'supprimerCategorie' categorie.id %}" onclick="return confirm('Voulez-vous supprimer le catégorie ? NB : Cela entrainera la suppression automatiques des articles qui la composent ?');"  class="btn btn-danger">Supprimer</a>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <p class="text-center">Aucun produit n'a été ajouté pour le moment.</p>
+            <p class="text-center">Aucune Catégorie n'a été ajouté pour le moment.</p>
             {% endfor %}
         </div>
     </div>
