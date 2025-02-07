@@ -25,9 +25,19 @@
             margin: 10px;
             background-color: #f9f9f9;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.8s;
+
+        }
+        .product-card:hover{
+            box-shadow: 0 4px 6px rgb(0,0,0,0.2);
+
+            transform: scale(1.04);
+            border-radius: 10px;
+
         }
         .product-image {
             max-width: 100%;
+            width: 300px;
             border-radius: 10px;
         }
         .btn-actions {
@@ -38,8 +48,26 @@
         .btn {
             font-family: "Times New Roman", sans-serif;
         }
-        .alert {
+
+        .message {
             font-family: "Times New Roman", sans-serif;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color:blue;
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: bold;
+
+        }
+
+
+        .center{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
 
         }
 
@@ -47,12 +75,15 @@
 </head>
 <body>
     <div class="container mt-5">
-        {% if messages %}
-        <div class="alert alert-success">
-            {% for message in messages %}
-            <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
+
+        <div class="message">
+            {% if messages %}
+                {% for message in messages %}
+                    <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                {% endfor %}
+            {% endif %}
+        </div>
+
         <h2 class="text-center">LES CATEGORIES</h2>
         <div class="text-end mb-3">
             <a href="{% url 'ajoutCategorie' %}" class="btn btn-primary">Nouveau Catégorie</a>
@@ -64,19 +95,23 @@
             <div class="col-md-4">
                 <div class="product-card">
 
-                    <h5>{{ categorie.titre}}</h5>
-                    <p style="text-align: right;" ><strong></strong> {{ categorie.dateAjout }}</p>
-
+                    <h4>{{ categorie.titre}}</h4>
+                    <p style="text-align: right;" ><strong>Ajouté : </strong> {{ categorie.dateAjout }}</p>
                     <p><strong>Description:</strong> {{ categorie.description }}</p>
 
 
-                    {% if categorie.image %}
-                    <img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image">
-                    {% else %}
-                    <p><em>Aucune image disponible</em></p>
-                    {% endif %}
+
+                    <div class="center">
+                        {% if categorie.image %}
+                            <img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image justify-content-center">
+                            {% else %}
+                            <p><em>Aucune image disponible</em></p>
+                        {% endif %}
+                    </div>
+
+
                     <div class="btn-actions">
-                        <a href="#"  class="btn btn-warning">Modifier</a>
+                        <a href="{% url 'modifierCategorie' categorie.id %}"  class="btn btn-warning">Modifier</a>
                         <a href="{% url 'supprimerCategorie' categorie.id %}" onclick="return confirm('Voulez-vous supprimer le catégorie ? NB : Cela entrainera la suppression automatiques des articles qui la composent ?');"  class="btn btn-danger">Supprimer</a>
                     </div>
                 </div>
@@ -86,7 +121,7 @@
             {% endfor %}
         </div>
     </div>
-    </div>
+
     <script src="{% static 'assets/js/bootstrap.min.js' %}" ></script>
 </body>
 </html>

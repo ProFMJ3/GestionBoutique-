@@ -5,14 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/modifierArticle.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/modifierCategorie.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/GestionBoutique.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GestionBoutique.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutArticle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/dash.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Untitled.mdj" beforeDir="false" afterPath="$PROJECT_DIR$/Untitled.mdj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -34,24 +48,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.GestionBoutique.executor": "Run",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
-    "git-widget-placeholder": "FMJ",
-    "last_opened_file_path": "D:/SEMESTRE3/INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211/PROGRAMME/GestionBoutique",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.GestionBoutique.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;FMJ&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/SEMESTRE3/INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211/PROGRAMME/GestionBoutique&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="GestionBoutique" type="Python.DjangoServer" factoryName="Django server">
       <module name="GestionBoutique" />
@@ -60,6 +76,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="GestionBoutique.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -97,7 +114,11 @@
       <workItem from="1738402193716" duration="2356000" />
       <workItem from="1738411424684" duration="1966000" />
       <workItem from="1738594585676" duration="6262000" />
-      <workItem from="1738648366826" duration="9195000" />
+      <workItem from="1738648366826" duration="9523000" />
+      <workItem from="1738678530818" duration="4296000" />
+      <workItem from="1738849500335" duration="635000" />
+      <workItem from="1738858360726" duration="7958000" />
+      <workItem from="1738912443204" duration="14473000" />
     </task>
     <servers />
   </component>

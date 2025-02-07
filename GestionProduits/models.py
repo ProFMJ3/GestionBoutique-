@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils import  timezone
+from django.core.exceptions import ValidationError
+from django.utils.text import capfirst
+import random
 
 # Create your models here.
 
@@ -68,19 +71,27 @@ NB:Si on prends une catégorie, on va avoir plusieurs articles et un article app
 
 """
 
-#Model catégorie
+#class catégorie : un ensemble d'articles
 
 class Categorie(models.Model):
     titre = models.CharField(max_length=128)
     description = models.TextField()
     image = models.ImageField(upload_to="ImagesCategories/", null=True, blank=True )
     dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True)
+    dateModification = models.DateTimeField(null=True, blank=True)
 
 
 
     class Meta:
         ordering =['-dateAjout']
+
+
+    def controleTitre(self):
+        self.titre = self.titre.strip()
+        if self.titre.replace(".", "", 1).replace(",", "",1).replace(";","",1) .isdigit():
+            raise ValidationError("Le titre ne doit pas être un nombre entier ou décimal. Il doit contenir des lettres.")
+
+        self.titre = capfirst(self.titre)
 
     def __str__(self):
         return self.titre
@@ -88,22 +99,33 @@ class Categorie(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is not None:  # Si l'article existe déjà (modification)
             self.dateModification = timezone.now()
+        else :
+            self.dateModification = None
+
+        self.full_clean()
         super().save(*args, **kwargs)
 
 
-#Classe Article 
+#Classe Article : composition d'une catégorie
 class Article(models.Model):
     nom = models.CharField(max_length=128)
     stock = models.PositiveBigIntegerField(default=1)
     image = models.ImageField(upload_to="imagesArticles/", null=True, blank=True)
     prixUnitaire = models.DecimalField(max_digits=10, decimal_places=2)
     dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True)
+    dateModification = models.DateTimeField(null=True, blank=True)
     categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
     disponible = models.BooleanField(default=True)
 
     class Meta:
         ordering=['-dateAjout']
+
+    def controleNom(self):
+        if self.titre.replace(".", "", 1).replace(",", "", 1).replace(";", "", 1).isdigit():
+
+            raise  ValidationError ("Le nom du produit ne doit pas un nombre. Plutôt un caractère !!")
+        else:
+            return self.nom
 
 
 
@@ -117,9 +139,13 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         if self.pk is not None:  # Si l'article existe déjà (modification)
             self.dateModification = timezone.now()
+        else:
+            self.dateModification =None
+        self.full_clean()
         super().save(*args, **kwargs)
 
 
+#class Client : celui qui va faire les achats 
 class Client(models.Model):
     nomClient = models.CharField(max_length=128, null=False)
     adresse = models.TextField(null=True, blank=True)
@@ -127,34 +153,69 @@ class Client(models.Model):
     dateInscription = models.DateTimeField(auto_now_add=True)
 
 
-"""
-#classe Panier
-class Panier(models.Model):
-    client = models.ManyToManyField(Client, through="Achat", related_name="panierClient")
 
-    dateAjout = models.DateTimeField(auto_now_add=True)
-    dateModification = models.DateTimeField(auto_now=True) 
+
+#classe Panier : un ensemble d'achats d'un client spécifique à un moment spécifique(date)
+class Panier(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="panier")
+    dateCreation = models.DateTimeField(auto_now_add=True)
+    #dateModification = models.DateTimeField(null=True)
     valide = models.BooleanField(default=False)
+    totalAchat =models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True)
+
+    def calculeTotal (self):
+        self.totalAchat=0
+        for achat in self.achatClient.all():
+            self.totalAchat += achat.quantite * achat.article.prixUnitaire
+            self.save()
+        return self.totalAchat
+
 
     def __str__(self):
-        return f"Panier de {self.client.nomClient} - {'Validé' if self.valide else 'En cours'}"
+        return f"Panier de {self.client.nomClient }- crée le {self.dateCreation} - {'Validé' if self.valide else 'En cours'} et total à payer est {self.totalAchat}"
 
-#classe Achat
+
+
+
+
+#classe Achat : composition de panier
 class Achat(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="achatClient")
+    #client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="achatClient")
     panier = models.ForeignKey(Panier, on_delete=models.CASCADE, related_name="achatClient")
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="achats")
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="achat")
     dateCommande = models.DateTimeField(auto_now_add=True)
     quantite = models.PositiveBigIntegerField(default=1)
-    prixTotal = models.DecimalField(max_digits=10, decimal_places=2)
+    prixAchat = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-    
     class Meta:
-        verbose_name = "Commande"
-        verbose_name_plural = "Commandes"
+
         ordering = ["dateCommande"]
 
 
     def __str__(self):
-        return f"{self.client.nomClient} a acheté {self.quantite} de {self.article.nom} le {self.dateCommande}"
+        return f"{self.panier.client.nomClient} a acheté {self.quantite} de {self.article.nom} le {self.dateCommande} et le prix de cet achat est {self.prixAchat}"
+
+
+    def save(self, *args, **kwargs):
+        if self.article and self.quantite:
+        #Calcule le prix total de l'achat en fonction du prix unitaire de l'article.
+            self.prixAchat = self.quantite * self.article.prixUnitaire
+        super().save(*args, **kwargs)
+
+
+
+
+"""
+class ModePaiement(models.Model):
+    type = models.CharField()
+
+#class Facture
+class Facture(models.Model):
+
+    panier = models.ForeignKey(Panier, related_name="facture", on_delete=models.CASCADE)
+    numero = random.randint(0, 9999)
+    prixTotalAchat = models.DecimalField(max_digits=10, decimal_places=2)
+    statut = models.BooleanField(default=False)
+    dateFacture = models.DateTimeField(auto_now_add=True)
+
 """

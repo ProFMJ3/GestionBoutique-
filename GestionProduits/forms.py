@@ -22,20 +22,24 @@ class CategorieForm(forms.Form):
 
 
 class ArticleForm(forms.Form):
+
+    categorie = forms.ModelChoiceField(label="Selectionnez la categorie :", queryset=Categorie.objects.all())
+
+
     nom = forms.CharField(label="Nom du produit :", max_length=128, required=True, widget=forms.TextInput(attrs={
         'placeholder': 'Entrez le nom du produit',
     }))
-    prixUnitaire = forms.DecimalField(label="Prix Unitaire du produit :", initial=0, required=True,
-                                    widget=forms.TextInput(attrs={
-                                        'placeholder': 'Entrez le prix du produit',
-                                    }))
-
-    categorie = forms.ModelChoiceField(label="Selectionnez la categorie :", queryset=Categorie.objects.all())
     image = forms.ImageField(label="Vous pouvez ajouter une image du produit :", required=True,
                              widget=forms.ClearableFileInput(attrs={
                                  'accept': 'image/*',
 
                              }))
+    prixUnitaire = forms.DecimalField(label="Prix Unitaire du produit :", initial=0, required=True,
+                                    widget=forms.TextInput(attrs={
+                                        'placeholder': 'Entrez le prix du produit',
+                                    }))
+
+
     stock = forms.IntegerField(label="Le stock du Produit  :", initial=0, required=True,
                                widget=forms.NumberInput(attrs={
                                    'placeholder': 'Le nombre de stock disponible'

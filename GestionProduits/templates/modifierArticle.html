@@ -8,7 +8,7 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
-    <style>
+      <style>
 
         .w-50{
             width: 50%;
@@ -22,7 +22,7 @@
             margin: 20px auto 10px;
         }
 
-        input, textarea, select, option{
+        input, textarea{
             margin: auto;
             border-radius: 10px;
             width:80%;
@@ -31,8 +31,7 @@
             align-items: center;
             border: 2px solid black;
         }
-
-        input:focus, textarea:focus, select:focus{
+        input:focus, textarea:focus{
             border-color: blue;
             outline: none;
         }
@@ -52,39 +51,49 @@
         .btn1{
             font-family: "Times News romans", sans-serif;
             padding: 10px;
-            width: 50%;
+            width: 30%;
             border-radius: 10px;
             align-items: center;
             justify-content:center;
-            font-size: 20px;
+
+            text-decoration: none;
             align-content: center;
             font-weight: bold;
-            margin-bottom:30px;
-            border-color: blue;
+            color:white;
+            margin-bottom : 30px;
             background-color: blue;
-            color: white;
+            border-color: white;
+
+
+        }
+
+        .btn1:hover{
+            background-color: darkblue;
         }
         .center{
             margin-top: 20px;
             display:flex;
             justify-content: center;
             align-items: center;
+            gap: 10px;
 
         }
+
         h2{
-            margin-top: 10px;
+            margin-top: 20px;
             text-align: center;
             color:blue;
             font-family: 'Times New Roman', Times, serif;
             font-weight:bold;
         }
+
         .btn-cont {
             display: flex;
             justify-content: space-between; /* Place les liens aux extrémités gauche et droite */
             align-items: center;
             padding: 10px;
             margin: 20px 0;
-            background-color: gray;
+            background-color: lightblue;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -108,37 +117,56 @@
         }
 
 
-    </style>
+        .message {
+            font-family: "Times New Roman", sans-serif;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color:blue;
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: bold;
 
+        }
+
+
+
+    </style>
 </head>
+
 <body>
 
-    <form action=" {% url 'ajoutArticle' %} " method="POST" enctype="multipart/form-data" >
+    <form action="{% url 'modifierArticle' article.id %}" method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
-            {% if formArticle.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
+
+            <div class="message">
+            {% if messages %}
+                {% for message in messages %}
+                    <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                {% endfor %}
             {% endif %}
+            </div>
                 <div class="btn-acceuil">
-                    <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
+                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
                 </div>
 
                 <div class="btn-liste">
-                    <a href=" {% url "listeArticle" %} " class="btn btn-primary">Liste Article</a>
+                    <a href=" {% url "listeCategorie" %} " class="btn btn-primary">Liste Catégorie</a>
                 </div>
 
             </div>
+        <div class="content w-50 d-flex">
 
-        <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
-
-            <marquee behavior="" direction=""><h2>NOUVEAU PRODUIT</h2></marquee>
+            <h2>Modifier la catégorie "{{ article.nom }}"</h2>
             {% csrf_token %}
             {{ formArticle }}
 
             <div class="center">
-                <button type="submit" class="btn1 btn-primary">Ajouter Article</button>
+                <a href="{% url 'listeArticle' %}" class="btn btn-info" >Retour à catégorie</a>
+                <button type="submit" class="btn1 btn-primary">Ajouter</button>
+
 
             </div>
 

@@ -21,5 +21,7 @@ urlpatterns = [
 #URL MENANT POUR LA SUPPRESSION
     path('supprimerArticle/<int:id>/', views.supprimerArticle, name='supprimerArticle'),
     path('supprimerCategorie/<int:id>/', views.supprimerCateegorie, name='supprimerCategorie'),
+    path('modifierCategorie/<int:idCate>/', views.modifierCategorie, name='modifierCategorie'),
+    path('modifierArticle/<int:idArticle>/', views.modifierArticle, name='modifierArticle'),
 
 ]

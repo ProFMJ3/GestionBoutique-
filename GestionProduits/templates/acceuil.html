@@ -11,7 +11,7 @@
     <style>
          .content{
 
-             width: 80%;
+             width: 100%;
              height: 100vh;
              background-color: lightgray;
              border:5px solid white;
@@ -19,6 +19,7 @@
              margin: 20px auto 10px;
              justify-content: center;
              text-align: center;
+             font-family: "Times New Roman", sans-serif;
 
         }
         .content h2{
@@ -32,23 +33,74 @@
                 width: 60%;
                 justify-content:center ;
                 align-content: center;
-                background-color: gray;
+                background-color: whitesmoke;
                 border-radius: 15px;
                 margin: 20px auto 10px;
         }
+           .container-fluid ul {
+               gap:10px;
+           }
+          .container-fluid a, ul, button{
+               color: white;
+              font-weight: bold;
+              font-family: "Times New Roman", sans-serif;
+           }
+
+          .head-content{
+              background-color: #2b2f32;
+          }
+
     </style>
 </head>
 <body>
+<header class="head-content">
+   <nav class="navbar navbar-expand-lg body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px" > FMJShop</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a href="{% url "ajoutCategorie" %}" aria-current="page" class="btn btn-primary">Nouveau Catégorie</a>
+
+
+        </li>
+        <li class="nav-item">
+              <a href="{% url "ajoutArticle" %}" aria-current="page" class="btn btn-primary">Nouveau Catégorie</a>
+
+        </li>
+          <li class="nav-item">
+              <a href="{% url "listeCategorie" %}" aria-current="page" class="btn btn-info">Mes Catégories</a>
+
+        </li>
+
+        <li class="nav-item">
+              <a href="{% url "listeArticle" %}" aria-current="page" class="btn btn-info">Mes articles</a>
+
+        </li>
+
+
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+</header>
 
     <div class="content">
         <h2 class="" >Bienvenue Sur notre Plateforme !!</h2>
         <div class="d-flex lien" >
 
-            <a href="{% url "ajoutCategorie" %}" class="btn btn-success">Nouveau Categorie</a>
+            <a href="{% url "ajoutCategorie" %}" class="btn btn-success">Nouveau Catégorie</a>
 
             <a href="{% url "ajoutArticle" %}" class="btn btn-success">Nouveau Article</a>
-            <a href="{% url "listeCategorie" %}" class="btn btn-secondary">Catégorie de mes Articles</a>
-            <a href="{% url "listeArticle" %}" class="btn btn-secondary">Mes Articles</a>
+            <a href="{% url "listeCategorie" %}" class="btn btn-outline-primary">Catégorie de mes Articles</a>
+            <a href="{% url "listeArticle" %}" class="btn btn-outline-primary">Mes Articles</a>
 
 
 

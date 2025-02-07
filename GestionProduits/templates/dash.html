@@ -7,12 +7,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord</title>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href=" {% static 'assets/css/bootstrap.min.css' %}">
 
 
 
@@ -33,7 +37,7 @@
         .dashboard-container {
             width: 100%;
             height: 100vh;
-            margin: 0;
+            margin: 10px;
             background-color: whitesmoke;
             padding: 20px 30px;
             /*box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);*/
@@ -52,25 +56,25 @@
         }
 
 
-        .dashboard-container h2 {
-            margin: 0;
-            padding: 0;
-        }
+
 
         .dashboard-container .sidebar{
             margin-left: -30px;
         }
+
+
         .sidebar{
             height: 80%;
             background-color: #343a40;
-            margin: 0 auto;
+            margin: 10px auto;
             border-top-right-radius: 10px;
             z-index: 1000;
             overflow-y: auto;
             border-bottom-right-radius: 10px;
             min-width: 15%;
-            position:revert;
-            padding-bottom:50px;
+
+
+
 
 
 
@@ -123,18 +127,78 @@
 
 
 
-        .projets{
-            width:100%;
-            height: 500px;
-            min-height: 100vh;
-            align-items: center;
-            margin: auto;
+         .sidebar h3{
+            font-weight: bold;
+            font-size: 20px;
+            position: relative;
+            /*animation: bougermessage 5s linear infinite ;*/
+
+        }
+         /*
+        @keyframes bougermessage {
+            from {
+
+                left: -50px
+            }to {
+                 left: 50px;
+             }
+
+        }
+            */
+
+        .statistique{
+
+            margin-right: 100px;
+            justify-content: center;
+
+
+
+
+        }
+        .modal-static{
+            display: flex;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-content: center;
+            justify-items: center;
+            gap: 10px;
+            background-color: white;
+
+            border-radius: 5px;
+            height: 150px;
+
+        }
+
+
+        .static{
+            text-align: center;
+            width: 250px;
             border-radius: 10px;
+            background-color: lightgray;
+            border: 2px solid white;
+            height:150px
+        }
+
+
+        .projets{
+
+            text-align: center;
+            border-radius: 10px;
+            background-color: lightgray;
+            border: 2px solid white;
+            min-height: 400px;
+            display: flex;
             flex-direction: column;
-            gap:10px;
+            font-family: "Times New Roman", sans-serif;
 
 
+        }
 
+        .projet-every{
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+            margin-top: 15px;
 
         }
 
@@ -145,71 +209,63 @@
 </head>
 <body>
 
-
-
-
-
     <div class="dashboard-container" >
+
         <div style="padding-bottom: 100px; ">
-        <div class="content fixed-top d-flex" >
 
-            <a class="btn btn-success"  href="{% url 'acceuil' %}">Acceuil </a>
+            <div class="content fixed-top d-flex" >
+                <a class="btn btn-success"  href="acceuil.php">Acceuil </a>
+                <a class="btn btn-success" href="../projets/ajoutProjet.php">New Project</a>
+                <a class="btn btn-success" href="../taches/ajoutTaches.php">New Task</a>
+                <a class="btn btn-success" href="#">Assigner</a>
 
-            <a class="btn btn-success" href=" {% url '' %} ">New Project</a>
-            <a class="btn btn-success" href="../taches/ajoutTaches.php">New Task</a>
-            <a class="btn btn-success" href="#">Assigner</a>
+                <form style="height: 50px" action="../projets/collaboration.php" method="POST" class="d-flex gap-3 mt-4 g-3">
+                    <label style="color: white; font-weight: bold" for="nom" class="form-label ">Collaboration</label>
+                    <select  class="form-select" name="projet" id="projet" required>
 
-            <form style="height: 50px" action="../projets/collaboration.php" method="POST" class="d-flex gap-3 mt-4 g-3">
-                <div id="succesMessage">
-
-
-                <label style="color: white; font-weight: bold" for="nom" class="form-label ">Collaboration</label>
-                <select  class="form-select" name="projet" id="projet" required>
-
-
-
-
-                        <option class="form-control" value="" disabled selected> Select the Projet</option>
-                        <?php
-                        $sql = $pdo->prepare("SELECT idProjet, nomProjet FROM Projets WHERE idUser =?");
-
-                        if($sql->execute(array($idUser))){
-                            ?>
+                            <option class="form-control" value="" disabled selected> Select the Projet</option>
                             <?php
-                            while ($resultats = $sql->fetch())
-                            {
+                            $sql = $pdo->prepare("SELECT idProjet, nomProjet FROM Projets WHERE idUser =?");
+
+                            if($sql->execute(array($idUser))){
                                 ?>
-
-                                <option class="form-control" value="<?=htmlspecialchars($resultats['idProjet']);?>"> <?php echo(($resultats['nomProjet'])); ?> </option>
-
                                 <?php
-                            } ;
-                        }
+                                while ($resultats = $sql->fetch())
+                                {
+                                    ?>
 
+                                    <option class="form-control" value="<?=htmlspecialchars($resultats['idProjet']);?>"> <?php echo(($resultats['nomProjet'])); ?> </option>
 
-                        ?>
-                </select>
+                                    <?php
+                                } ;
+                            }
 
-                <input class="form-control"  type="text" id="nom" name="nom" placeholder="username du collaborateur" required>
-                <button type="submit" class="btn btn-primary " onclick="CollabortionSucces()" >Collaborer</button>
+                            ?>
+                    </select>
 
-            </form>
+                    <input class="form-control"  type="text" id="nom" name="nom" placeholder="username du collaborateur" required>
+                    <button type="submit" class="btn btn-primary " onclick="CollabortionSucces()" >Collaborer</button>
+
+                </form>
+
+            </div>
+
         </div>
-        </div>
-
-        </div>
+<!--        <h2 style="text-align: center; background-color: #343a40; padding: 0; border-bottom-right-radius: 8px;" class="mb-5 " > , Bienvenue sur votre tableau de bord</h2>-->
 
 
-        <div class="d-flex" style="margin:0;">
+
+        <div class="d-flex sib-sta ">
             <!-- Menu de navigation -->
             <div class="sidebar p-3">
+                <h3 class="username text-info ">Bienvenu <?php echo $username;?> </h3>
                 <h4 class="text-white">Mon Dashboard</h4>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" href="#"> <i class="bi bi-house-fill"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'listeArticle' %}"><i class="bi bi-folder"></i> Mes Articles</a>
+                        <a class="nav-link" href="../projets/userProjets.php"><i class="bi bi-folder"></i> Mes Projets</a>
                         <ul class="nav flex-column ms-3">
 
                             <li class="nav-item">
@@ -222,35 +278,93 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href=".{% url 'acceuil' %}"><i class="bi bi-person"></i> Mon Compte</a>
+                        <a class="nav-link" href="../auth/userCompte.php"><i class="bi bi-person"></i> Mon Compte</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-bell"></i> Notifications</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'acceuil' %}"><i class="bi bi-person-plus"></i> Nouveau Compte</a>
+                        <a class="nav-link" href="../auth/inscription.php"><i class="bi bi-person-plus"></i> Nouveau Compte</a>
                     </li>
                     <li>
-                        <a class="decon" href="{% url 'acceuil' %}"> <i class="bi bi-person-fill-dash"></i> Se déconnecter</a>
+                        <a class="decon" href="../auth/deconnexion.php"> <i class="bi bi-person-fill-dash"></i> Se déconnecter</a>
                     </li>
                 </ul>
             </div>
 
 
-            <div class="projets">
+
+            <div class="statistique">
 
 
+
+
+                <div class="modal-static">
+                    <div class="static">
+                        <h1>Projet</h1>
+                        <p>Total : </p>
+                    </div>
+
+                    <div class="static">
+                        <h1>Collaboration</h1>
+                        <p> Total :  </p>
+                    </div>
+                    <div class="static">
+                        <h1>Projet en cours</h1>
+                        <p> Total : <?php echo $nprojetEncours ;?> </p>
+
+                         </div>
+                    <div class="static">
+                        <h1>Projet terminé</h1>
+                        <p> Total : <?php echo $nprojetTermine ;?> </p>
+
+                    </div>
+
+                </div>
+
+                <div class="projets">
+                    <h2 style="color: #0a53be" >Votre Calendrier</h2>
+
+                    <?php
+
+                    if($projets) {
+
+                        foreach($projets as $projet){
+
+
+                            ?>
+                            <div class="projet-every" >
+                                <p style="color: black; font-size: 20px;" ><?php echo ($projet['nomProjet']); ?> : </p>
+                                <p style="color: red; font-weight: bold"> DEADLINE : <?php echo htmlspecialchars($projet['dateFin']); ?>  </p>
+                            </div>
+
+
+<!--                                <a href=" ../projets/modifierProjet.php?idProjet= --><?php //=$projet['idProjet'];?><!--" class="btn1 btn btn-success"> Plus </a>-->
+
+
+                            <?php
+
+                        } ?>
+                        <?php
+                    }else{
+                        ?>
+                        <p class="aucun-projet" >Vous n'avez créé aucun projet</p>
+                        <?php
+                    }
+                    ?>
+
+
+                </div>
             </div>
 
-
-
-    </div>
+        </div>
 
 
 
-    <footer class="mon-footer" >
-        <p>Vos données sont biens protégés. </p>
-    </footer>
+</div>
+
+
+
 
     <script>
         function CollabortionSucces(){
@@ -260,8 +374,6 @@
             message.innerHTML = "Collaboration a été effectué avec succès !!";
 
             message.style.Display = "block";
-
-
         }
     </script>
 </body>
