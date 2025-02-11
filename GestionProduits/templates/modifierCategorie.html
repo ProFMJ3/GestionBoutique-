@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJOUT</title>
+    <title>FMJShop-UPDATE</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
       <style>
-
+        body{
+            font-family: "Times New Roman", sans-serif;
+        }
         .w-50{
             width: 50%;
         }
@@ -75,9 +77,13 @@
             display:flex;
             justify-content: center;
             align-items: center;
+            align-content: center;
+            margin-bottom: 30px;
+
             gap: 10px;
 
         }
+
 
         h2{
             margin-top: 20px;
@@ -123,10 +129,19 @@
             text-align: center;
             justify-content: center;
             align-items: center;
-            color:blue;
+            color:orange;
             font-size: 18px;
             margin-top: 10px;
             font-weight: bold;
+
+        }
+
+        .image-centent{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
 
         }
 
@@ -140,31 +155,47 @@
     <form action="{% url 'modifierCategorie' categorie.id %}" method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
-            <div class="message">
+
+                <div class="btn-acceuil">
+                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
+                </div>
+
+             <div class="message">
             {% if messages %}
                 {% for message in messages %}
                     <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
                 {% endfor %}
             {% endif %}
             </div>
-                <div class="btn-acceuil">
-                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
-                </div>
 
                 <div class="btn-liste">
                     <a href=" {% url "listeCategorie" %} " class="btn btn-primary">Liste Catégorie</a>
                 </div>
 
             </div>
+
         <div class="content w-50 d-flex">
 
             <h2>Modifier la catégorie "{{ categorie.titre }}"</h2>
+
             {% csrf_token %}
+
+            <div class="image-centent">
+
+
+                {% if categorie.image %}
+                <p class=" text-center" >Image actuelle :</p>
+                <img  src="{{categorie.image.url }}" alt="Image de l'article" class="img-fluid rounded" style="width:  200px; height: auto;">
+                {% endif %}
+
+            </div>
+
+
             {{ formCategorie }}
 
             <div class="center">
-                <a href="{% url 'listeCategorie' %}" class="btn btn-info" >Retour à l'article</a>
-                <button type="submit" class="btn1 btn-primary">Ajouter</button>
+                <a href="{% url 'listeCategorie' %}" class="btn btn-info" >Retour</a>
+                <button type="submit" class="btn btn-outline-warning">Mise à jour</button>
 
 
             </div>

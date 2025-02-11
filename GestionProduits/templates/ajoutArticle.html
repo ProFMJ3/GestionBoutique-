@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJOUT</title>
+    <title>FMJShop-AJOUT</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -20,6 +20,7 @@
             border:10px solid white;
             border-radius: 15px;
             margin: 20px auto 10px;
+            font-family: "Times New Roman", sans-serif;
         }
 
         input, textarea, select, option{
@@ -49,26 +50,13 @@
             color:black;
         }
 
-        .btn1{
-            font-family: "Times News romans", sans-serif;
-            padding: 10px;
-            width: 50%;
-            border-radius: 10px;
-            align-items: center;
-            justify-content:center;
-            font-size: 20px;
-            align-content: center;
-            font-weight: bold;
-            margin-bottom:30px;
-            border-color: blue;
-            background-color: blue;
-            color: white;
-        }
+
         .center{
             margin-top: 20px;
             display:flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 30px;
 
         }
         h2{
@@ -84,7 +72,7 @@
             align-items: center;
             padding: 10px;
             margin: 20px 0;
-            background-color: gray;
+            background-color: lightblue;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -106,7 +94,9 @@
             background-color: #0056b3;
             transform: scale(1.05); /* Légère augmentation de taille au survol */
         }
-
+        .message{
+            color: #0a53be;
+        }
 
     </style>
 
@@ -116,13 +106,16 @@
     <form action=" {% url 'ajoutArticle' %} " method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
-            {% if formArticle.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
-            {% endif %}
+
                 <div class="btn-acceuil">
                     <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
+                </div>
+                <div class="message">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                    {% endfor %}
+                    {% endif %}
                 </div>
 
                 <div class="btn-liste">
@@ -133,12 +126,12 @@
 
         <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
 
-            <marquee behavior="" direction=""><h2>NOUVEAU PRODUIT</h2></marquee>
+            <marquee behavior="" direction=""><h2>NOUVELLE ARTICLE</h2></marquee>
             {% csrf_token %}
             {{ formArticle }}
 
             <div class="center">
-                <button type="submit" class="btn1 btn-primary">Ajouter Article</button>
+                <button type="submit" class="btn btn-primary">Ajouter Article</button>
 
             </div>
 

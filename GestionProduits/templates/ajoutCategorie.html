@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJOUT</title>
+    <title>FMJShop-AJOUT</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -122,14 +122,20 @@
     <form action="{% url 'ajoutCategorie' %}" method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
-            {% if form.errors %}
-            <div class="alert alert-danger">
-                {{ form.errors }}
-            </div>
-            {% endif %}
+
+
                 <div class="btn-acceuil">
                     <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
                 </div>
+
+                <div class="message">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
 
                 <div class="btn-liste">
                     <a href=" {% url "listeCategorie" %} " class="btn btn-primary">Liste Catégorie</a>

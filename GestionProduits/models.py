@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import  timezone
 from django.core.exceptions import ValidationError
 from django.utils.text import capfirst
+from django.core.validators import  RegexValidator
+
 import random
 
 # Create your models here.
@@ -145,11 +147,16 @@ class Article(models.Model):
         super().save(*args, **kwargs)
 
 
+phone_validateur = RegexValidator(
+    regex=r'^\+?1?\d{9,15}$',
+    message="Le numéro doit être au format international (+123456789)"
+)
+
 #class Client : celui qui va faire les achats 
 class Client(models.Model):
     nomClient = models.CharField(max_length=128, null=False)
     adresse = models.TextField(null=True, blank=True)
-    telephone = models.CharField(max_length=15, null=True, blank=True)
+    telephone = models.CharField(validators=[phone_validateur], unique=True, null=True, blank=True)
     dateInscription = models.DateTimeField(auto_now_add=True)
 
 

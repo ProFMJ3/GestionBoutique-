@@ -1,6 +1,7 @@
 
+{% extends "acceuil.html" %}
 
-
+{% block contenu %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -30,10 +31,7 @@
             height: 100vh;
         }
 
-        header {
-            margin: 0;
-            padding: 0;
-        }
+
         .dashboard-container {
             width: 100%;
             height: 100vh;
@@ -75,52 +73,18 @@
 
 
 
-
-
-
         }
         .sidebar a {
+            margin-bottom: 20px;
             color: white;
             text-decoration: none;
         }
         .sidebar a:hover {
             background-color: #495057; /* Couleur au survol */
         }
-        .content {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            text-align: center;
-            height: 80px;
-            padding: 1px 10px;
-            margin: 0 ;
-            background-color: #343a40;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
 
-        }
-        .content a{
-            align-content: center;
-            height: 55px;
-            border-width: 5px;
-            border-color: white;
-            color: white;
 
-        }
 
-        a{
-            display: flex;
-            margin-top: 20px;
-            color: white;
-            background-color:green;
-            border-radius: 10px;
-            font-weight: bolder;
-            cursor: pointer;
-            padding: 10px 20px;
-            text-decoration: none;
-            border: black;
-
-        }
         .bi {
             color: #00aeff;
         }
@@ -134,6 +98,7 @@
             /*animation: bougermessage 5s linear infinite ;*/
 
         }
+
          /*
         @keyframes bougermessage {
             from {
@@ -205,67 +170,27 @@
 
 
 
+
     </style>
 </head>
+
 <body>
+
 
     <div class="dashboard-container" >
 
-        <div style="padding-bottom: 100px; ">
 
-            <div class="content fixed-top d-flex" >
-                <a class="btn btn-success"  href="acceuil.php">Acceuil </a>
-                <a class="btn btn-success" href="../projets/ajoutProjet.php">New Project</a>
-                <a class="btn btn-success" href="../taches/ajoutTaches.php">New Task</a>
-                <a class="btn btn-success" href="#">Assigner</a>
-
-                <form style="height: 50px" action="../projets/collaboration.php" method="POST" class="d-flex gap-3 mt-4 g-3">
-                    <label style="color: white; font-weight: bold" for="nom" class="form-label ">Collaboration</label>
-                    <select  class="form-select" name="projet" id="projet" required>
-
-                            <option class="form-control" value="" disabled selected> Select the Projet</option>
-                            <?php
-                            $sql = $pdo->prepare("SELECT idProjet, nomProjet FROM Projets WHERE idUser =?");
-
-                            if($sql->execute(array($idUser))){
-                                ?>
-                                <?php
-                                while ($resultats = $sql->fetch())
-                                {
-                                    ?>
-
-                                    <option class="form-control" value="<?=htmlspecialchars($resultats['idProjet']);?>"> <?php echo(($resultats['nomProjet'])); ?> </option>
-
-                                    <?php
-                                } ;
-                            }
-
-                            ?>
-                    </select>
-
-                    <input class="form-control"  type="text" id="nom" name="nom" placeholder="username du collaborateur" required>
-                    <button type="submit" class="btn btn-primary " onclick="CollabortionSucces()" >Collaborer</button>
-
-                </form>
-
-            </div>
-
-        </div>
-<!--        <h2 style="text-align: center; background-color: #343a40; padding: 0; border-bottom-right-radius: 8px;" class="mb-5 " > , Bienvenue sur votre tableau de bord</h2>-->
-
-
-
-        <div class="d-flex sib-sta ">
+        <div class="d-flex">
             <!-- Menu de navigation -->
             <div class="sidebar p-3">
-                <h3 class="username text-info ">Bienvenu <?php echo $username;?> </h3>
+                <h3 class="username text-info">Bienvenu </h3>
                 <h4 class="text-white">Mon Dashboard</h4>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" href="#"> <i class="bi bi-house-fill"></i> Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../projets/userProjets.php"><i class="bi bi-folder"></i> Mes Projets</a>
+                        <a class="nav-link" href="#"><i class="bi bi-folder"></i> Mes Projets</a>
                         <ul class="nav flex-column ms-3">
 
                             <li class="nav-item">
@@ -278,16 +203,16 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../auth/userCompte.php"><i class="bi bi-person"></i> Mon Compte</a>
+                        <a class="nav-link" href="#"><i class="bi bi-person"></i> Mon Compte</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="bi bi-bell"></i> Notifications</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../auth/inscription.php"><i class="bi bi-person-plus"></i> Nouveau Compte</a>
+                        <a class="nav-link" href="#"><i class="bi bi-person-plus"></i> Nouveau Compte</a>
                     </li>
                     <li>
-                        <a class="decon" href="../auth/deconnexion.php"> <i class="bi bi-person-fill-dash"></i> Se déconnecter</a>
+                        <a class="decon  btn btn-success" href="#"> <i class="bi bi-person-fill-dash"></i> Se déconnecter</a>
                     </li>
                 </ul>
             </div>
@@ -295,8 +220,6 @@
 
 
             <div class="statistique">
-
-
 
 
                 <div class="modal-static">
@@ -365,16 +288,10 @@
 
 
 
+<script src="{% static 'assets/js/bootstrap.min.js' %}" ></script>
 
-    <script>
-        function CollabortionSucces(){
-
-            let message= document.getElementById("succesMessage");
-
-            message.innerHTML = "Collaboration a été effectué avec succès !!";
-
-            message.style.Display = "block";
-        }
-    </script>
 </body>
 </html>
+
+{% endblock %}
+

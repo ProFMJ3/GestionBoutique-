@@ -1,4 +1,5 @@
-
+{% extends "acceuil.html" %}
+{% block contenu %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,6 +47,12 @@
             justify-content: space-between;
             margin-top: 10px;
         }
+        .product-card .entete{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
         .btn {
             font-family: "Times New Roman", sans-serif;
         }
@@ -66,10 +73,15 @@
             justify-content: center;
             text-align: center;
         }
+        a{
+            font-weight:bold;
+        }
 
     </style>
 </head>
+
 <body>
+
     <div class="container mt-5">
        <div class="message">
             {% if messages %}
@@ -80,7 +92,7 @@
         </div>
         <h2 class="text-center">LES ARTICLES</h2>
         <div class="text-end mb-3">
-            <a href="{% url 'ajoutArticle' %}" class="btn btn-primary">Nouveau Produit</a>
+            <a href="{% url 'ajoutArticle' %}" class="btn btn-primary">Nouvelle  Article</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
         </div>
         
@@ -88,13 +100,21 @@
             {% for article in articles %}
             <div class="col-md-4">
                 <div class="product-card">
+                    <div class="entete">
+                        <h5> <strong>{{ article.nom }} </strong> </h5>
+                        <a style="color: white"  class="btn btn-dark" href="#" > Ajouter au panier <i class="fa-solid fa-basket-shopping"></i> </a>
 
-                    <h5>{{ article.nom }}</h5>
-                    <p style="text-align: right;" ><strong></strong> {{ article.dateAjout }}</p>
+                    </div>
+                    <p ><strong>-------------------------------------------------------------------- </strong></p>
+
+
+
+
                     <p><strong>Prix:</strong> {{ article.prixUnitaire }} FCFA</p>
 
-                    <p><strong>Catégorie:</strong> {{ article.categorie.nom }}</p>
+                    <p><strong>Catégorie:</strong> {{ article.categorie.titre }}</p>
                     <p><strong>Stock:</strong> {{ article.stock }}</p>
+                    <p style="text-align: right;" ><strong>  {{ article.dateAjout }} </strong></p>
                     <div class="center">
 
 
@@ -105,8 +125,8 @@
                     {% endif %}
                     </div>
                     <div class="btn-actions">
-                        <a href="#"  class="btn btn-warning">Modifier</a>
-                        <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger">Supprimer</a>
+                        <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-warning"><i class="fas fa-edit" ></i> Modifier</a>
+                        <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i> Supprimer</a>
                     </div>
                 </div>
             </div>
@@ -115,7 +135,12 @@
             {% endfor %}
         </div>
     </div>
-    </div>
+
+
     <script src="{% static 'assets/js/bootstrap.min.js' %}" ></script>
 </body>
+
 </html>
+{% endblock %}
+
+

@@ -6,11 +6,15 @@ urlpatterns = [
 #URL MENANT VERS LA PAGE ACCEUIL #LA VUE POUR AFFICHER ACCEUIL
     path('', views.acceuil, name='acceuil'),
 
+    #URL MENANT VERS LE DASHBOARD
+    path('dash/', views.dash, name='dash'),
+
 # URL MENANT VERS LE FORMULAIRE D'AJOUT DE CATEGORIE
     path('ajoutCategorie/', views.ajoutCategorie, name='ajoutCategorie'),
 
 # URL MENANT VERS LE FORMULAIRE D'AJOUT D'ARTICLE
     path('ajoutArticle/', views.ajoutArticle, name='ajoutArticle'),
+    path('ajoutClient/', views.ajoutClient, name='ajoutClient'),
 
 #URL MENANT VERS LA PAGE DE LISTE ARTICLE
     path('listeArticle/', views.listeArticle, name='listeArticle'),

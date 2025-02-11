@@ -2,18 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>FMJShop</title>
+</head>
+<body>
+
+<form action="" method="POST" enctype="multipart/form-data" >
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FMJShop-UPDATE</title>
+    <title>FMJShop-AJOUT</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
-      <style>
+    <style>
         body{
-            font-family: "Times News romans", sans-serif;
+            font-family: "Times New Roman", sans-serif;
+
         }
+
         .w-50{
             width: 50%;
+            font-family: "Times New Roman", sans-serif;
         }
 
         .content{
@@ -22,9 +35,10 @@
             border:10px solid white;
             border-radius: 15px;
             margin: 20px auto 10px;
+            font-family: "Times New Roman", sans-serif;
         }
 
-        input, textarea, select{
+        input, textarea, select, option{
             margin: auto;
             border-radius: 10px;
             width:80%;
@@ -32,8 +46,10 @@
             justify-content: center;
             align-items: center;
             border: 2px solid black;
+            font-family: "Times New Roman", sans-serif;
         }
-        input:focus, textarea:focus{
+
+        input:focus, textarea:focus, select:focus{
             border-color: blue;
             outline: none;
         }
@@ -51,27 +67,21 @@
         }
 
 
-
         .center{
             margin-top: 20px;
             display:flex;
             justify-content: center;
             align-items: center;
             margin-bottom: 30px;
-            font-weight: bold;
-            gap: 10px;
-
 
         }
-
         h2{
-            margin-top: 20px;
+            margin-top: 10px;
             text-align: center;
             color:blue;
             font-family: 'Times New Roman', Times, serif;
             font-weight:bold;
         }
-
         .btn-cont {
             display: flex;
             justify-content: space-between; /* Place les liens aux extrémités gauche et droite */
@@ -100,87 +110,54 @@
             background-color: #0056b3;
             transform: scale(1.05); /* Légère augmentation de taille au survol */
         }
-
-
-        .message {
-            font-family: "Times New Roman", sans-serif;
-            display: flex;
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            color:blue;
-            font-size: 18px;
-            margin-top: 10px;
-            font-weight: bold;
-
+        .message{
+            color: #0a53be;
         }
-
-        .image-centent{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-
-
-        }
-
-
 
     </style>
-</head>
 
+</head>
 <body>
 
-    <form action="{% url 'modifierArticle' article.id %}" method="POST" enctype="multipart/form-data" >
+    <form action=" {% url 'ajoutClient' %} " method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
 
                 <div class="btn-acceuil">
-                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
+                    <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
                 </div>
                 <div class="message">
                     {% if messages %}
-                        {% for message in messages %}
-                            <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
-                        {% endfor %}
+                    {% for message in messages %}
+                        <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                    {% endfor %}
                     {% endif %}
                 </div>
 
                 <div class="btn-liste">
-                    <a href=" {% url "listeArticle" %} " class="btn btn-primary">Liste Articles</a>
+                    <a href=" {% url "listeArticle" %} " class="btn btn-primary">Liste Article</a>
                 </div>
 
             </div>
 
+        <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
 
-        <div class="content w-50 d-flex">
-
-            <h2>Modifier l'article "{{ article.nom }}"</h2>
-
+            <marquee behavior="" direction=""><h2>NOUVEAU CLIENT</h2></marquee>
             {% csrf_token %}
-
-            <div class="image-centent">
-
-
-                {% if article.image %}
-                <p class=" text-center" >Image actuelle :</p>
-                <img  src="{{article.image.url }}" alt="Image de l'article" class="img-fluid rounded" style="width:  200px; height: auto;">
-                {% endif %}
-
-            </div>
-
-            {{ formArticle }}
-
+            {{ formClient }}
 
             <div class="center">
-                <a href="{% url 'listeArticle' %}" class="btn btn-info" >Retour</a>
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
-
+                <button type="submit" class="btn btn-primary">Ajouter Article</button>
 
             </div>
 
         </div>
 
     </form>
+</body>
+</html>
+
+</form>
+
 </body>
 </html>
