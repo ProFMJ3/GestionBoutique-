@@ -12,6 +12,7 @@ class CategorieForm(forms.Form):
     }))
     description = forms.CharField(label="Description :", required=True, widget=forms.Textarea(attrs={
         'placeholder': 'Entrez une description',
+
         'rows': 5,
     }))
 
@@ -82,7 +83,7 @@ class ClientForm(forms.Form):
                                     'class': 'form-control'
 
                                 }))
-        telephone = forms.MultipleChoiceField(label="Numéro de téléphone du client(optionnel) :", required=False, widget=forms.TextInput(attrs={
+        telephone = forms.CharField(label="Numéro de téléphone du client(optionnel) :", required=False, widget=forms.TextInput(attrs={
             'placeholder': 'Ex : +22879405199',
             'class':'form-control',
         }))

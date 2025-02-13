@@ -65,15 +65,20 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="nav navbar-nav me-auto mb-2 mb-lg-0 ms-3">
         <li class="nav-item">
-            <a href="{% url "ajoutCategorie" %}" aria-current="page" class="btn btn-primary">Nouvelle Catégorie</a>
+            <a href="{% url "listeCategorie" %}" aria-current="page" class="nav-link  ">🛒Liste des Catégorie</a>
 
 
         </li>
         <li class="nav-item">
-              <a href="{% url "ajoutArticle" %}" aria-current="page" class="btn btn-primary">Nouvelle article</a>
-              <a href="{% url "ajoutClient" %}" aria-current="page" class="btn btn-secondary">Nouveau client</a>
+              <a href="{% url "listeArticle" %}" aria-current="page" class="nav-link">Liste de tous les article</a>
+
+
+        </li>
+          <li class="nav-item">
+
+              <a href="{% url "listeClient" %}" aria-current="page" class="nav-link">Liste des clients</a>
 
         </li>
 
@@ -85,16 +90,10 @@
         <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
-          <li class="nav-item">
-              <li class="nav-item">
-                  <a href="{% url "listeCategorie" %}" aria-current="page" class="btn btn-info">Mes Catégories</a>
 
-            </li>
 
-        <li class="nav-item">
-              <a href="{% url "listeArticle" %}" aria-current="page" class="btn btn-info">Mes articles</a>
 
-        </li>
+
 
         <li class="nav-item">
               <a href="{% url "dash" %}" aria-current="page" class="btn btn-info">Dashboard</a>
@@ -102,7 +101,7 @@
         </li>
 
         <li class="nav-item">
-              <a href="{% url "dash" %}" aria-current="page" class="btn btn-outline-light">Paniers</a>
+              <a style="background-color: white; color: black" href="{% url "dash" %}" aria-current="page" class="btn btn-outline-light">🛒 <i class="fas fa-shopping-cart "></i> Paniers</a>
 
         </li>
 

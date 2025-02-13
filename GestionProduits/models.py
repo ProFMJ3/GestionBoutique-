@@ -4,6 +4,9 @@ from django.core.exceptions import ValidationError
 from django.utils.text import capfirst
 from django.core.validators import  RegexValidator
 
+import uuid
+import re
+
 import random
 
 # Create your models here.
@@ -87,26 +90,32 @@ class Categorie(models.Model):
     class Meta:
         ordering =['-dateAjout']
 
-
-    def controleTitre(self):
+    def clean(self):
+        """ Vérifie que le titre n'est pas un nombre, même avec des séparateurs. """
         self.titre = self.titre.strip()
-        if self.titre.replace(".", "", 1).replace(",", "",1).replace(";","",1) .isdigit():
-            raise ValidationError("Le titre ne doit pas être un nombre entier ou décimal. Il doit contenir des lettres.")
 
+        # Supprime tous les séparateurs (.,;: et espaces) pour ne garder que les caractères
+        titre_sans_separateurs = re.sub(r'[.,;:\s]', '', self.titre)
+
+        # Vérifie si après suppression des séparateurs, il ne reste que des chiffres
+        if titre_sans_separateurs.isdigit():
+            raise ValidationError(
+                {"titre": "Le titre ne doit pas être un nombre entier ou décimal. Il doit contenir des lettres."})
+
+        # S'assure que le titre commence par une majuscule
         self.titre = capfirst(self.titre)
 
     def __str__(self):
         return self.titre
 
     def save(self, *args, **kwargs):
-        if self.pk is not None:  # Si l'article existe déjà (modification)
+        if self.pk:  # Si l'objet est mis à jour
             self.dateModification = timezone.now()
-        else :
+        else:
             self.dateModification = None
 
-        self.full_clean()
+        self.full_clean()  # Exécute `clean()` pour valider les données
         super().save(*args, **kwargs)
-
 
 #Classe Article : composition d'une catégorie
 class Article(models.Model):
@@ -116,14 +125,14 @@ class Article(models.Model):
     prixUnitaire = models.DecimalField(max_digits=10, decimal_places=2)
     dateAjout = models.DateTimeField(auto_now_add=True)
     dateModification = models.DateTimeField(null=True, blank=True)
-    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE, related_name='article')
     disponible = models.BooleanField(default=True)
 
     class Meta:
         ordering=['-dateAjout']
 
     def controleNom(self):
-        if self.titre.replace(".", "", 1).replace(",", "", 1).replace(";", "", 1).isdigit():
+        if self.nom.replace(".", "", 1).replace(",", "", 1).replace(";", "", 1).isdigit():
 
             raise  ValidationError ("Le nom du produit ne doit pas un nombre. Plutôt un caractère !!")
         else:
@@ -159,27 +168,33 @@ class Client(models.Model):
     telephone = models.CharField(validators=[phone_validateur], unique=True, null=True, blank=True)
     dateInscription = models.DateTimeField(auto_now_add=True)
 
-
+    class Meta:
+        ordering = ['-dateInscription']
 
 
 #classe Panier : un ensemble d'achats d'un client spécifique à un moment spécifique(date)
 class Panier(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="panier")
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="paniers", null=True,blank=True)
+    NouveautNomClient = models.CharField(max_length=128, null=True, blank=True)
+    NouveauTelephoneClient =  models.CharField(validators=[phone_validateur], unique=True, null=True, blank=True)
     dateCreation = models.DateTimeField(auto_now_add=True)
-    #dateModification = models.DateTimeField(null=True)
     valide = models.BooleanField(default=False)
-    totalAchat =models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True)
+    totalAchat = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True)
 
-    def calculeTotal (self):
-        self.totalAchat=0
-        for achat in self.achatClient.all():
-            self.totalAchat += achat.quantite * achat.article.prixUnitaire
-            self.save()
-        return self.totalAchat
-
+    class Meta:
+        ordering = ['-dateCreation']
+    #Fonction pour calculer le total des
+    def calculeTotal(self):
+        """ Calcule et mis à jour le total des achats dU panier """
+        total = sum(achat.quantite * achat.article.prixUnitaire for achat in self.achatClient.all())
+        self.totalAchat = total  # Stocke le total dans le champ totalAchat
+        self.save()  # Enregistre la mise à jour dans la base de données
+        return self.totalAchat  # Retourne la valeur mise à jour
 
     def __str__(self):
-        return f"Panier de {self.client.nomClient }- crée le {self.dateCreation} - {'Validé' if self.valide else 'En cours'} et total à payer est {self.totalAchat}"
+        status = "Validé" if self.valide else "En cours"
+        return f"Panier de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M')} - {status} - Total : {self.totalAchat}FCFA"
+
 
 
 
@@ -196,7 +211,7 @@ class Achat(models.Model):
 
     class Meta:
 
-        ordering = ["dateCommande"]
+        ordering = ["-dateCommande"]
 
 
     def __str__(self):
@@ -209,6 +224,26 @@ class Achat(models.Model):
             self.prixAchat = self.quantite * self.article.prixUnitaire
         super().save(*args, **kwargs)
 
+
+        #Ajout du prix d'achat au total d'achat du panier au panier
+        self.panier.calculeTotal()
+
+
+
+
+
+class Facture(models.Model):
+    panier = models.ForeignKey(Panier, related_name="factures", on_delete=models.CASCADE)
+
+    # Numéro unique généré automatiquement
+    numero = models.CharField(max_length=36, unique=True, default=uuid.uuid4, editable=False)
+
+    prixTotalAchat = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    statut = models.BooleanField(default=False)
+    dateFacture = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Facture {self.numero} - {self.panier} - {self.prixTotalAchat}FCFA"
 
 
 

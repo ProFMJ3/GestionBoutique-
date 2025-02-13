@@ -1,3 +1,5 @@
+from itertools import count
+
 from django.db.models.fields import return_None
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -6,6 +8,8 @@ from django.contrib import messages
 from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm
 
 from .models import Categorie, Article, Client, Panier
+from  django.db.models import Count
+from django.core.exceptions import ValidationError
 
 
 # git config --global core.autocrlf true
@@ -33,10 +37,17 @@ def ajoutCategorie(request):
             titre = form.cleaned_data['titre']
             description = form.cleaned_data['description']
             image = form.cleaned_data['image']
-            categorie = Categorie(titre=titre, description=description, image=image)
-            categorie.save()
-            messages.success(request, "Catégorie ajoutée avec succès !")
-            return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
+            try:
+
+
+                categorie = form.save(commit =False)
+                categorie = Categorie(titre=titre, description=description, image=image)
+                categorie.full_clean()
+                categorie.save()
+                messages.success(request, "Catégorie ajoutée avec succès !")
+                return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
+            except ValidationError as e:
+                form.add_error('titre', e.message_dict.get('titre',"Erreur !! Le titre ne doit être pas un nombre"))
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -46,15 +57,6 @@ def ajoutCategorie(request):
         form = CategorieForm()
 
     return render(request, 'ajoutCategorie.html', {'form': form})
-#LA VUE POUR SUPPRIMER UNE CATEGORIE
-def supprimerCateegorie(request, id):
-    if request.method == 'GET':
-        categorie = get_object_or_404(Categorie, id=id)
-        categorie.delete()
-        messages.success(request, f"{categorie.titre} a été supprimé avec succès")
-        return redirect('listeCategorie')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
-    else:
-        return HttpResponse("Méthode non autorisée", status=405)
 
 
 #LA VUE POUR AJOUTER UNE NOUVELLE ARTICLE
@@ -86,27 +88,64 @@ def ajoutArticle(request):
 #LA VUE POUR AFFICHER LES ARTICLES
 def listeArticle(request):
     articles = Article.objects.all()
+    total = articles.count()
 
-    context = {"articles": articles}
-    if not articles.exists:
-        message = "Aucun produit n'est enregistré"
+    context = {"articles": articles, 'total':total}
+    if not articles.exists():
+        message = "Aucune article n'est enregistré"
+        total =0
 
-        return render(request, "listeArticle.html", {"message": message})
+        return render(request, "listeArticle.html", {"message": message, 'total':total})
 
     return render(request, "listeArticle.html", context)
 
+def categorieArticle(request, idCategorie):
+
+    #categorie = Categorie.objects.filter(id =idCategorie)
+    categorie = get_object_or_404(Categorie ,id =idCategorie)
+    categorieArticles = Article.objects.filter(categorie=categorie)
+    totalArticle = categorieArticles.count()
+
+    context = {"categorieArticles": categorieArticles, "categorie":categorie, 'totalArticle':totalArticle}
+    if not categorieArticles.exists():
+        message = "Aucune article n'est enregistré"
+        totalArticle = 0
+
+        return render(request,  "categorieArticle.html", {"message": message, 'totalArticle':totalArticle})
+
+    return render(request, "categorieArticle.html", context)
+
 
 #LA VUE POUR AFFICHER LES CATEGORIE
+
 def listeCategorie(request):
-    categories = Categorie.objects.all()
 
-    context = {"categories": categories}
-    if not categories.exists:
+    categories = Categorie.objects.annotate(totalArticles = Count('article')).order_by('-dateAjout')
+    totalCategorie = categories.count()
+
+
+
+
+    context = {"categories": categories,'totalCategorie':totalCategorie }
+    if not categories.exists():
         message = "Aucun produit n'est enregistré"
+        totalCategorie = 0
 
-        return render(request, 'listeCategorie.html', {"message": message})
+        return render(request, 'listeCategorie.html', {"message": message},'totalCategorie',totalCategorie)
 
     return render(request, 'listeCategorie.html', context)
+
+
+
+#LA VUE POUR SUPPRIMER UNE CATEGORIE
+def supprimerCateegorie(request, id):
+    if request.method == 'GET':
+        categorie = get_object_or_404(Categorie, id=id)
+        categorie.delete()
+        messages.success(request, f"{categorie.titre} a été supprimé avec succès")
+        return redirect('listeCategorie')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
 
 
 #LA VUE POUR SUPPRIMER UN ARTICLE
@@ -129,19 +168,23 @@ def modifierCategorie(request, idCate):
         formCategorie = CategorieForm(request.POST, request.FILES)
 
         if formCategorie.is_valid():
+
             categorie.titre = formCategorie.cleaned_data['titre']
             categorie.description = formCategorie.cleaned_data['description']
 
             if 'image' in request.FILES:
                 categorie.image = request.FILES['image']
 
+            try:
+                categorie.full_clean()
+                categorie.save()
 
-            categorie.save()
+                messages.success(request,  f" Catégorie ' {categorie.titre} ' a été  mis à jour  avec succès !")
+                #return redirect('listeCategorie', idCate = categorie.id )  # Redirection vers la page de liste des catégories
 
-            messages.success(request,  f" Catégorie ' {categorie.titre} ' a été  mis à jour  avec succès !")
-            #return redirect('listeCategorie', idCate = categorie.id )  # Redirection vers la page de liste des catégories
-
-            return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
+                return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
+            except ValidationError as e:
+                formCategorie.add_error('titre', e.message_dict.get("titre", "Erreur !!"))
 
         else:
             for field, errors in formCategorie.errors.items():
@@ -158,9 +201,15 @@ def modifierCategorie(request, idCate):
 
 #Views pour modifier
 def modifierArticle(request, idArticle):
+
+    #Récuperation de la ligne dans la table catégorie
     article = get_object_or_404(Article, id=idArticle)
+
     if request.method == "POST":
+
+
         formArticle = ArticleFormM(request.POST, request.FILES)
+
         if formArticle.is_valid():
 
             article.nom = formArticle.cleaned_data['nom']
@@ -190,6 +239,7 @@ def modifierArticle(request, idArticle):
     return render(request, 'modifierArticle.html', {'formArticle': formArticle, 'article':article })
 
 
+
 # LA VUE POUR AJOUTER UNE NOUVELLE CATEGORIE
 def ajoutClient(request):
     if request.method == 'POST':
@@ -204,7 +254,7 @@ def ajoutClient(request):
             client = Client(nomClient=nomClient, adresse=adresse, telephone=tel)
             client.save()
             messages.success(request, f"Client {client.nomClient} ajoutée avec succès !")
-            return redirect('acceuil')  # Redirection vers la page de liste des catégories
+            return redirect('listeClient')  # Redirection vers la page de liste des catégories
         else:
             for field, errors in formClient.errors.items():
                 for error in errors:
@@ -214,3 +264,22 @@ def ajoutClient(request):
         formClient = ClientForm()
 
     return render(request, 'ajoutClient.html', {'formClient': formClient})
+
+
+#Client 
+def listeClient(request):
+    clients = Client.objects.all()
+    totalClient = clients.count()
+
+    context = {"clients": clients, 'totalClient':totalClient}
+    if not clients.exists():
+        message = "Aucun client n'est enregistré"
+        totalClient =0
+
+        return render(request, "listeClient.html", {"message": message, 'totalClient':totalClient})
+
+    return render(request, "listeClient.html", context)
+
+def ajoutPanier(request):
+    pass
+

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMJShop-Client</title>
+    {% load static %}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+            font-family: "Times New Roman", serif;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-container {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Liste des Etudiants</h2>
+
+        <div class="btn-container">
+            <a href="{% url 'ajoutClient' %}" class="btn-primary">Nouveau Client</a>
+            <a href="{% url 'acceuil' %}" class="btn-primary">Acceuil</a>
+
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+
+                    <th>Nom et Prénoms</th>
+                    <th>Telephone</th>
+                    <th>Adresse</th>
+                    <th>Date Inscription</th>
+                    <th class="text-center" >Action</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                    <tr>
+
+                        <td>{{ client.nomClient }}  </td>
+                        <td>{{ client.telephone }} </td>
+                        <td>{{ client.adresse  }}</td>
+                        <td>{{ client.dateInscription }} </td>
+                        <td class="text-center" >
+                            <a href="#" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
+                            <a href="#" class="btn btn-danger"><i class="fas fa-trash" ></i></a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Aucun client trouvé</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

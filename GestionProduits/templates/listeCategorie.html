@@ -33,7 +33,6 @@
         }
         .product-card:hover{
             box-shadow: 0 4px 6px rgb(0,0,0,0.2);
-
             transform: scale(1.04);
             border-radius: 10px;
 
@@ -74,6 +73,12 @@
 
         }
 
+        .titre-total{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -87,7 +92,7 @@
             {% endif %}
         </div>
 
-        <h2 class="text-center">LES CATEGORIES</h2>
+        <h2 class="text-center">TOTAL DES CATEGORIES : {{ totalCategorie }}  </h2>
         <div class="text-end mb-3">
             <a href="{% url 'ajoutCategorie' %}" class="btn btn-primary">Nouveau Catégorie</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
@@ -97,9 +102,13 @@
             {% for categorie in categories %}
             <div class="col-md-4">
                 <div class="product-card">
+                    <div class="titre-total">
+                        <h4> <strong>{{ categorie.titre}} </strong> </h4>
+                        <p>{{ categorie.totalArticles  }} articles</p>
 
-                      <h4> <strong>{{ categorie.titre}}</strong> </h4>
-                    <p style="text-align: right;" ><strong>Ajouté : </strong> {{ categorie.dateAjout }}</p>
+                    </div>
+
+                    <p style="text-align: right;" ><strong></strong> {{ categorie.dateAjout }}</p>
                     <p><strong>Description:</strong> {{ categorie.description }}</p>
 
 
@@ -109,7 +118,7 @@
                             {% comment %}
                             <a href="{% url 'listeArticle' categorie.id %}"><img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image justify-content-center"></a>
                             {% endcomment %}
-                            <a href="{% url 'listeArticle' %}"><img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image justify-content-center"></a>
+                            <a href="{% url 'categorieArticle' categorie.id %}"><img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image justify-content-center"></a>
                             {% else %}
                             <p><em>Aucune image disponible</em></p>
                         {% endif %}
@@ -117,8 +126,8 @@
 
 
                     <div class="btn-actions">
-                        <a href="{% url 'modifierCategorie' categorie.id %}"  class="btn btn-warning"> <i class="fas fa-edit" ></i> Modifier</a>
-                        <a href="{% url 'supprimerCategorie' categorie.id %}" onclick="return confirm('Voulez-vous supprimer le catégorie ? NB : Cela entrainera la suppression automatiques des articles qui la composent ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i> Supprimer</a>
+                        <a href="{% url 'modifierCategorie' categorie.id %}"  class="btn btn-warning"> <i class="fas fa-edit" ></i></a>
+                        <a href="{% url 'supprimerCategorie' categorie.id %}" onclick="return confirm('Voulez-vous supprimer le catégorie ? NB : Cela entrainera la suppression automatiques des articles qui la composent ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i></a>
                     </div>
                 </div>
             </div>

@@ -41,7 +41,6 @@
             max-width: 100%;
             width: 300px;
             border-radius: 10px;
-            margin-bottom:30px
         }
         .btn-actions {
             display: flex;
@@ -91,14 +90,15 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <h2 class="text-center">LES ARTICLES {{ total }} </h2>
+        <h2 class="text-center">Total des articles de la catégorie <strong>{{ categorie.titre }} : {{ totalArticle }} </strong> </h2>
+
         <div class="text-end mb-3">
             <a href="{% url 'ajoutArticle' %}" class="btn btn-primary">Nouvelle  Article</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
         </div>
         
         <div class="row">
-            {% for article in articles %}
+            {% for article in categorieArticles %}
             <div class="col-md-4">
                 <div class="product-card">
                     <div class="entete">
@@ -115,10 +115,7 @@
 
                     <p><strong>Catégorie:</strong> {{ article.categorie.titre }}</p>
                     <p><strong>Stock:</strong> {{ article.stock }}</p>
-                {% comment %}
                     <p style="text-align: right;" ><strong>  {{ article.dateAjout }} </strong></p>
-                    {% endcomment %}
-
                     <div class="center">
 
 
@@ -128,17 +125,14 @@
                     <p><em>Aucune image disponible</em></p>
                     {% endif %}
                     </div>
-
-                    <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-success"> Ajouter Stock</a>
-
                     <div class="btn-actions">
-                        <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-warning"><i class="fas fa-edit" ></i></a>
-                        <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i></a>
+                        <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-warning"><i class="fas fa-edit" ></i> Modifier</a>
+                        <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i> Supprimer</a>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <p class="text-center">Aucun article n'a été ajouté pour le moment.</p>
+            <p class="text-center">Aucun article n'a été pour cette catégorie.</p>
             {% endfor %}
         </div>
     </div>
