@@ -2,16 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>FMJShop</title>
+</head>
+<body>
+
+<form action="" method="POST" enctype="multipart/form-data" >
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FMJShop-AJOUT</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
-      <style>
+    <style>
+        body{
+            font-family: "Times New Roman", sans-serif;
+
+        }
 
         .w-50{
             width: 50%;
+            font-family: "Times New Roman", sans-serif;
         }
 
         .content{
@@ -20,9 +35,10 @@
             border:10px solid white;
             border-radius: 15px;
             margin: 20px auto 10px;
+            font-family: "Times New Roman", sans-serif;
         }
 
-        input, textarea{
+        input, textarea, select, option{
             margin: auto;
             border-radius: 10px;
             width:80%;
@@ -30,9 +46,10 @@
             justify-content: center;
             align-items: center;
             border: 2px solid black;
-            margin-bottom: 30px;
+            font-family: "Times New Roman", sans-serif;
         }
-        input:focus, textarea:focus{
+
+        input:focus, textarea:focus, select:focus{
             border-color: blue;
             outline: none;
         }
@@ -47,31 +64,24 @@
             font-family: "Times News romans", sans-serif;
             font-weight: bold;
             color:black;
-            margin-bottom: 30px;
-        }
-        .btn {
-            margin-bottom: 30px;
         }
 
 
-        .btn:hover{
-            background-color: darkblue;
-        }
         .center{
             margin-top: 20px;
             display:flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 30px;
 
         }
         h2{
-            margin-top: 20px;
+            margin-top: 10px;
             text-align: center;
             color:blue;
             font-family: 'Times New Roman', Times, serif;
             font-weight:bold;
         }
-
         .btn-cont {
             display: flex;
             justify-content: space-between; /* Place les liens aux extrémités gauche et droite */
@@ -100,77 +110,48 @@
             background-color: #0056b3;
             transform: scale(1.05); /* Légère augmentation de taille au survol */
         }
-
+        .message{
+            color: #0a53be;
+        }
 
     </style>
-</head>
 
+</head>
 <body>
 
-    <form action="{% url 'ajoutCategorie' %}" method="POST" enctype="multipart/form-data" >
+    <form action=" {% url 'modifierClient' client.id %} " method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
 
-
                 <div class="btn-acceuil">
-                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
+                    <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
                 </div>
-
-               {% if messages %}
-    <div class="message">
-        {% for message in messages %}
-            {% if message.tags == "success" %}
-                <marquee behavior="" direction="">
-                    <p class="alert alert-success">{{ message }}</p>
-                </marquee>
-            {% endif %}
-        {% endfor %}
-    </div>
-{% endif %}
 
 
                 <div class="btn-liste">
-                    <a href=" {% url "listeCategorie" %} " class="btn btn-primary">Liste Catégorie</a>
+                    <a href=" {% url "listeClient" %} " class="btn btn-primary">Liste Client</a>
                 </div>
 
             </div>
-        <div class="content w-50 d-flex">
 
-            <h2>NOUVEAU CATEGORIE</h2>
-           {% if form.errors %}
-    <div class="alert alert-danger">
-        <ul>
-            {% for field, errors in form.errors.items %}
-                {% for error in errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-        </ul>
-    </div>
-{% endif %}
+        <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
+
+            <marquee behavior="" direction=""><h2>MODIFICATION CLIENT</h2></marquee>
             {% csrf_token %}
-
-
-            {{ form }}
-
-
-
-
-
-
-
-
-
-
-
+            {{ formClient }}
 
             <div class="center">
-                <button type="submit" class="btn btn-primary">Ajouter</button>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
 
             </div>
 
         </div>
 
     </form>
+</body>
+</html>
+
+</form>
+
 </body>
 </html>

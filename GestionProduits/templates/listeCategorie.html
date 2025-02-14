@@ -64,7 +64,6 @@
 
         }
 
-
         .center{
             display: flex;
             justify-content: center;
@@ -93,11 +92,22 @@
         </div>
 
         <h2 class="text-center">TOTAL DES CATEGORIES : {{ totalCategorie }}  </h2>
-        <div class="text-end mb-3">
-            <a href="{% url 'ajoutCategorie' %}" class="btn btn-primary">Nouveau Catégorie</a>
+
+        <div class="tete d-flex gap-3 mt-4 mb-4">
+
+
+
+            <form class="d-flex m-auto " role="search">
+                <div class="d-flex" >
+                <input class="form-control me-2" type="search" required placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                </div>
+            </form>
+
+
+            <a href="{% url 'ajoutClient' %}" class="btn btn-primary">Nouveau Article</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
         </div>
-
         <div class="row">
             {% for categorie in categories %}
             <div class="col-md-4">

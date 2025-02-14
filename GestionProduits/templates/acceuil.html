@@ -24,6 +24,10 @@
              font-family: "Times New Roman", sans-serif;
 
         }
+         .collapse a:hover{
+             background-color: #007bff;
+             border-radius: 5px;
+         }
         .content h2{
             color: blue;
             margin-top: 30px;
@@ -60,35 +64,32 @@
 <header class="head-content">
    <nav class="navbar navbar-expand-lg body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand btn btn-primary" href="{% url 'dash' %}"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px" > FMJShop</a>
+    <a class="navbar-brand btn btn-primary" href="#"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px" > FMJShop</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav me-auto mb-2 mb-lg-0 ms-3">
         <li class="nav-item">
-            <a href="{% url "listeCategorie" %}" aria-current="page" class="nav-link  ">🛒Liste des Catégorie</a>
+            <a href="{% url "listeCategorie" %}" aria-current="page" class="nav-link ">  <i class="fas fa-th-large"></i> Liste des Catégories</a>
 
 
         </li>
         <li class="nav-item">
-              <a href="{% url "listeArticle" %}" aria-current="page" class="nav-link">Liste de tous les article</a>
+              <a href="{% url "listeArticle" %}" aria-current="page" class="nav-link"><i class="fas fa-box"></i> Liste de tous les articles</a>
 
 
         </li>
           <li class="nav-item">
 
-              <a href="{% url "listeClient" %}" aria-current="page" class="nav-link">Liste des clients</a>
+              <a href="{% url "listeClient" %}" aria-current="page" class="nav-link"><i class="fa-solid fa-users"></i> Liste des clients</a>
 
         </li>
 
 
 
       </ul>
-      <form class="d-flex m-auto " role="search">
-        <input class="form-control me-2" type="search" required placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-primary" type="submit">Search</button>
-      </form>
+
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
 
 

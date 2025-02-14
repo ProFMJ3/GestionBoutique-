@@ -47,6 +47,7 @@
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
+            gap: 5px;
         }
         .product-card .entete{
             display: flex;
@@ -77,6 +78,14 @@
         a{
             font-weight:bold;
         }
+        .add-stock{
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .add-stock input{
+            max-width: 50%;
+        }
 
     </style>
 </head>
@@ -103,7 +112,6 @@
                 <div class="product-card">
                     <div class="entete">
                         <h5> <strong>{{ article.nom }} </strong> </h5>
-                        <a style="color: white"  class="btn btn-dark" href="#" > Ajouter au panier <i class="fas fa-shopping-cart"></i> </a>
 
                     </div>
                     <p ><strong>-------------------------------------------------------------------- </strong></p>
@@ -128,13 +136,42 @@
                     <p><em>Aucune image disponible</em></p>
                     {% endif %}
                     </div>
+                    <form action="" method="POST">
+                        <div class="add-stock">
 
-                    <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-success"> Ajouter Stock</a>
 
-                    <div class="btn-actions">
+                            <input  class="form-control" type="number" min="1" placeholder="Qté à ajouter">
+
+                            <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-success"> Ajouter Stock</a>
+
+
+                        </div>
+                    </form>
+
+
+                    <form action="" method="POST">
+
+                        <div class="btn-actions">
+                        {% comment %}
                         <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-warning"><i class="fas fa-edit" ></i></a>
                         <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i></a>
-                    </div>
+                    {% endcomment %}
+
+
+                            <input type="number" placeholder="Qte à payer" min="0" class="form-control" >
+                            <select class="form-select" name="" id="">
+                                <option disabled selected >Select</option>
+                                <option value="1">panier1</option>
+                                <option value="2">panier2</option>
+                                <option value="3">panier3</option>
+                            </select>
+                            
+                            <a style="color: white"  class="btn btn-dark" href="#" >Panier+<i class="fas fa-shopping-cart"></i> </a>
+
+
+
+                        </div>
+                    </form>
                 </div>
             </div>
             {% empty %}

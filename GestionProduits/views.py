@@ -40,7 +40,7 @@ def ajoutCategorie(request):
             try:
 
 
-                categorie = form.save(commit =False)
+                #categorie = form.save(commit =False)
                 categorie = Categorie(titre=titre, description=description, image=image)
                 categorie.full_clean()
                 categorie.save()
@@ -48,10 +48,7 @@ def ajoutCategorie(request):
                 return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
             except ValidationError as e:
                 form.add_error('titre', e.message_dict.get('titre',"Erreur !! Le titre ne doit être pas un nombre"))
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
+
 
     else:
         form = CategorieForm()
@@ -99,6 +96,72 @@ def listeArticle(request):
 
     return render(request, "listeArticle.html", context)
 
+def articles(request):
+    articles = Article.objects.all()
+    total = articles.count()
+
+    context = {"articles": articles, 'total':total}
+    if not articles.exists():
+        message = "Aucune article n'est enregistré"
+        total =0
+
+        return render(request, "articles.html", {"message": message, 'total':total})
+
+    return render(request, "articles.html", context)
+
+
+#Views pour modifier article
+def modifierArticle(request, idArticle):
+
+    #Récuperation de la ligne dans la table catégorie
+    article = get_object_or_404(Article, id=idArticle)
+
+    if request.method == "POST":
+
+
+        formArticle = ArticleFormM(request.POST, request.FILES)
+
+        if formArticle.is_valid():
+
+            article.nom = formArticle.cleaned_data['nom']
+            article.prixUnitaire = formArticle.cleaned_data['prixUnitaire']
+            article.categorie = formArticle.cleaned_data['categorie']
+
+            #article.image = formArticle.cleaned_data.get('image', article.image)  # Garde l'ancienne image si non modifiée
+            article.stock = formArticle.cleaned_data['stock']
+            if 'image' in request.FILES:
+                article.image = request.FILES['image']
+
+            article.save()
+            messages.success(request, f"Mis à jour de l'article {article.nom} !!")
+            return redirect('articles')  # Redirection vers la page de liste des produits
+        else:
+            for field, errors in formArticle.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+
+    else:
+        formArticle = ArticleFormM(initial={
+            'nom': article.nom,
+            'prixUnitaire': article.prixUnitaire,
+            'categorie': article.categorie,
+            'stock': article.stock,
+        })
+    return render(request, 'modifierArticle.html', {'formArticle': formArticle, 'article':article })
+
+
+#LA VUE POUR SUPPRIMER UN ARTICLE
+def supprimerArticle(request, id):
+    if request.method == 'GET':
+        article = get_object_or_404(Article, id=id)
+        article.delete()
+        messages.success(request, f"{article.nom} a été supprimé avec succès")
+        return redirect('articles')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
+
+
+
 def categorieArticle(request, idCategorie):
 
     #categorie = Categorie.objects.filter(id =idCategorie)
@@ -124,8 +187,6 @@ def listeCategorie(request):
     totalCategorie = categories.count()
 
 
-
-
     context = {"categories": categories,'totalCategorie':totalCategorie }
     if not categories.exists():
         message = "Aucun produit n'est enregistré"
@@ -148,16 +209,6 @@ def supprimerCateegorie(request, id):
         return HttpResponse("Méthode non autorisée", status=405)
 
 
-#LA VUE POUR SUPPRIMER UN ARTICLE
-def supprimerArticle(request, id):
-    if request.method == 'GET':
-        article = get_object_or_404(Article, id=id)
-        article.delete()
-        messages.success(request, f"{article.nom} a été supprimé avec succès")
-        return redirect('listeArticle')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
-    else:
-        return HttpResponse("Méthode non autorisée", status=405)
-
 
 
 def modifierCategorie(request, idCate):
@@ -173,18 +224,12 @@ def modifierCategorie(request, idCate):
             categorie.description = formCategorie.cleaned_data['description']
 
             if 'image' in request.FILES:
-                categorie.image = request.FILES['image']
-
-            try:
-                categorie.full_clean()
                 categorie.save()
-
+    
                 messages.success(request,  f" Catégorie ' {categorie.titre} ' a été  mis à jour  avec succès !")
-                #return redirect('listeCategorie', idCate = categorie.id )  # Redirection vers la page de liste des catégories
-
+                #return redirect('listeCategorie', idCate = categorie.id)  # Redirection vers la page de liste des catégories
+    
                 return redirect('listeCategorie')  # Redirection vers la page de liste des catégories
-            except ValidationError as e:
-                formCategorie.add_error('titre', e.message_dict.get("titre", "Erreur !!"))
 
         else:
             for field, errors in formCategorie.errors.items():
@@ -198,45 +243,6 @@ def modifierCategorie(request, idCate):
         })
     return render(request, 'modifierCategorie.html', {'formCategorie':formCategorie, 'categorie':categorie})
 
-
-#Views pour modifier
-def modifierArticle(request, idArticle):
-
-    #Récuperation de la ligne dans la table catégorie
-    article = get_object_or_404(Article, id=idArticle)
-
-    if request.method == "POST":
-
-
-        formArticle = ArticleFormM(request.POST, request.FILES)
-
-        if formArticle.is_valid():
-
-            article.nom = formArticle.cleaned_data['nom']
-            article.prixUnitaire = formArticle.cleaned_data['prixUnitaire']
-            article.categorie = formArticle.cleaned_data['categorie']
-
-            #article.image = formArticle.cleaned_data.get('image', article.image)  # Garde l'ancienne image si non modifiée
-            article.stock = formArticle.cleaned_data['stock']
-            if 'image' in request.FILES:
-                article.image = request.FILES['image']
-
-            article.save()
-            messages.success(request, f"{article.nom} a été modifié avec succès")
-            return redirect('listeArticle')  # Redirection vers la page de liste des produits
-        else:
-            for field, errors in formArticle.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-
-    else:
-        formArticle = ArticleFormM(initial={
-            'nom': article.nom,
-            'prixUnitaire': article.prixUnitaire,
-            'categorie': article.categorie,
-            'stock': article.stock,
-        })
-    return render(request, 'modifierArticle.html', {'formArticle': formArticle, 'article':article })
 
 
 
@@ -253,7 +259,7 @@ def ajoutClient(request):
             tel = formClient.cleaned_data['telephone']
             client = Client(nomClient=nomClient, adresse=adresse, telephone=tel)
             client.save()
-            messages.success(request, f"Client {client.nomClient} ajoutée avec succès !")
+            messages.success(request, f"Client {client.nomClient} ajouté avec succès !")
             return redirect('listeClient')  # Redirection vers la page de liste des catégories
         else:
             for field, errors in formClient.errors.items():
@@ -279,6 +285,54 @@ def listeClient(request):
         return render(request, "listeClient.html", {"message": message, 'totalClient':totalClient})
 
     return render(request, "listeClient.html", context)
+
+
+#Views pour modifier
+def modifierClient(request, idClient):
+
+    #Récupération de la ligne dans la table Cleint
+    client = get_object_or_404(Client, id=idClient)
+
+    if request.method == "POST":
+
+
+        formClient = ClientForm(request.POST)
+
+        if formClient.is_valid():
+
+            client.nomClient = formClient.cleaned_data['nomClient']
+            client.adresse = formClient.cleaned_data['adresse']
+            client.tel = formClient.cleaned_data['telephone']
+
+            client.save()
+            messages.success(request, f"Mis à jour du client {client.nomClient}!")
+            return redirect('listeClient')  # Redirection vers la page de liste des catégories
+
+        else:
+            for field, errors in formClient.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+
+    else:
+        formClient = ClientForm(initial={
+            'nomClient': client.nomClient,
+            'adresse': client.adresse,
+            'tel': client.telephone,
+        })
+    return render(request, 'modifierClient.html', {'formClient': formClient, 'client':client})
+
+
+
+#LA VUE POUR SUPPRIMER UN client
+def supprimerClient(request, id):
+    if request.method == 'GET':
+        client = get_object_or_404(Client, id=id)
+        client.delete()
+        messages.success(request, f"{client.nomClient} a été supprimé avec succès")
+        return redirect('listeClient')  # Assure-toi que 'listeProduit' est bien défini dans urls.py
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
+
 
 def ajoutPanier(request):
     pass

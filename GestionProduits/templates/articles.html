@@ -85,7 +85,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Liste des clients</h2>
+        <h2>Liste des articles</h2>
 
         <div class="btn-container">
             <div class="message">
@@ -95,8 +95,7 @@
                     {% endfor %}
                     {% endif %}
                 </div>
-
-           <div class="tete d-flex gap-3">
+        <div class="tete d-flex gap-3">
 
 
 
@@ -108,7 +107,7 @@
             </form>
 
 
-            <a href="{% url 'ajoutClient' %}" class="btn-primary">Nouveau Article</a>
+            <a href="{% url 'ajoutArticle' %}" class="btn-primary">Nouveau Article</a>
             <a href="{% url 'acceuil' %}" class="btn-primary">Acceuil</a>
         </div>
 
@@ -118,25 +117,34 @@
             <thead>
                 <tr>
 
-                    <th>Nom et Prénoms</th>
-                    <th>Telephone</th>
-                    <th>Adresse</th>
-                    <th>Date Inscription</th>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Stock</th>
+                    <th>Image</th>
+                    <th>Catégorie</th>
+                    <th>Date Ajout</th>
+
                     <th class="text-center" >Action</th>
 
                 </tr>
             </thead>
             <tbody>
-                {% for client in clients %}
+                {% for article in articles %}
                     <tr>
 
-                        <td>{{ client.nomClient }}  </td>
-                        <td>{{ client.telephone }} </td>
-                        <td>{{ client.adresse  }}</td>
-                        <td>{{ client.dateInscription }} </td>
+                        <td>{{ article.nom }}  </td>
+                        <td>{{ article.prixUnitaire }} </td>
+                        <td>{{ article.stock  }}</td>
+                        {% if  article.image %}
+                           <td><img src="{{ article.image.url }}" alt="Image de {{ article.nom }}" style="max-width: 100px; max-height: 50px;" class="product-image"> </td>
+                        {% else %}
+                            <td><em>Aucune image disponible</em></td>
+                    {% endif %}
+                        <td>{{ article.categorie }} </td>
+                        <td>{{ article.dateAjout }} </td>
                         <td class="text-center" >
-                            <a href="{% url 'modifierClient' client.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
-                            <a href="{% url 'supprimerClient' client.id %}" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
+                            <a href="{% url 'modifierArticle' article.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
+                            <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer l\'article ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
                         </td>
                     </tr>
                 {% empty %}

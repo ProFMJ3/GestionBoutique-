@@ -19,6 +19,7 @@ urlpatterns = [
 
 #URL MENANT VERS LA PAGE DE LISTE ARTICLE
     path('listeArticle/', views.listeArticle, name='listeArticle'),
+    path('articles/', views.articles, name='articles'),
 
 #URL MENANT VERS LA PAGE DE LISTE CATEGORIE
     path('listeCategorie/', views.listeCategorie, name='listeCategorie'),
@@ -34,8 +35,10 @@ urlpatterns = [
 #URL MENANT POUR LA SUPPRESSION
     path('supprimerArticle/<int:id>/', views.supprimerArticle, name='supprimerArticle'),
     path('supprimerCategorie/<int:id>/', views.supprimerCateegorie, name='supprimerCategorie'),
+    path('supprimerClient/<int:id>/', views.supprimerClient, name='supprimerClient'),
     path('modifierCategorie/<int:idCate>/', views.modifierCategorie, name='modifierCategorie'),
     path('modifierArticle/<int:idArticle>/', views.modifierArticle, name='modifierArticle'),
+    path('modifierClient/<int:idClient>/', views.modifierClient, name='modifierClient'),
 
 
     path("ajoutPanier/", views.ajoutPanier, name="ajoutPanier"),
