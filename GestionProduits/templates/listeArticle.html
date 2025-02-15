@@ -159,6 +159,7 @@
                             <option disabled selected>Choisir un panier</option>
                             {% for panier in paniers %}
                                 <option value="{{ panier.id }}">{{ panier.client.nomClient }} --- Créer le {{ panier.dateCreation|date:"d/m/Y H:i" }} </option>
+                                <input type="hidden" name="client_id" value="{{ panier.client.id }}">
                             {% endfor %}
                             {% if not paniers %}
                                 <option value="#">Aucun panier disponible</option>

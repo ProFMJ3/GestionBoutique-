@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutPanier.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/listeAchat.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/newPanier.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/panierNonvalide.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/ajoutCategorie.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/dash.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/modifierCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/modifierCategorie.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -137,7 +124,7 @@
       <workItem from="1739396393924" duration="28583000" />
       <workItem from="1739531736502" duration="13160000" />
       <workItem from="1739549416571" duration="9026000" />
-      <workItem from="1739564115147" duration="34226000" />
+      <workItem from="1739564115147" duration="35881000" />
     </task>
     <servers />
   </component>

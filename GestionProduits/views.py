@@ -365,11 +365,22 @@ def ajoutPanier(request):
 
     if request.method == "POST":
 
+        """
+            quantite = request.POST.get("quantite")
+            panier_id = request.POST.get("panierId")
 
-        data = json.loads(request.body)
-        article_id = data.get("article_id")
-        client_id = data.get("client_id")
-        quantite = int((data.get("quantite")))
+            try:
+                panier = Panier.objects.get(id=panier_id)
+                quantite = int(quantite)
+
+                # Ajouter l'achat au panier...
+                messages.success(request, "Article ajouté au panier avec succès !")
+        """
+
+        #data = json.loads(request.body)
+        article_id = request.POST.get("article_id")
+        panierId = request.POST.get("panierId")
+        quantite = int((request.POST.get("quantite")))
 
         try:
             article = Article.objects.get(id=article_id)
@@ -377,9 +388,9 @@ def ajoutPanier(request):
         except Article.DoesNotExist:
             return JsonResponse({"success": False, "message": "Article introuvable"}, status=400)
 
-        client = Client.objects.get(id=client_id)
+        #client = Client.objects.get(id=client_id)
 
-        panier, created = Panier.objects.get_or_create(client=client, valide=False)
+        panier = Panier.objects.get_or_create(id=panierId, valide=False)
 
         achat_existant = Achat.objects.filter(panier=panier, article=article).first()
 
@@ -412,7 +423,7 @@ def ajoutPanier(request):
 
         return JsonResponse({"success": True, "message": "Article ajouté au panier avec succès !"})
 
-    redirect('listePanier')
+    redirect('listeArticle')
     #return JsonResponse({"success": False}, status=400)
 
 def panier_view(request):
