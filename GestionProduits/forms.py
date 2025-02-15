@@ -1,7 +1,8 @@
 from django import forms
 from django.forms.widgets import TextInput
 
-from .models import Categorie
+from .models import Categorie, Client
+import  re
 
 
 
@@ -95,3 +96,10 @@ class ClientForm(forms.Form):
 
 
                                  }))
+
+
+class PanierForm(forms.Form):
+
+    client = forms.ModelChoiceField(label="Selectionnez le client", required=True, queryset = Client.objects.all())
+    #NouveauNomClient = forms.CharField(label="Entrez le nom du client s'il n'existe pas ")
+    #NouveauTelephoneClient = forms.CharField(label="Entrez le contact du nouveau client ")

@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
 
 #URL MENANT VERS LA PAGE ACCEUIL #LA VUE POUR AFFICHER ACCEUIL
-    path('', views.acceuil, name='acceuil'),
+    path('acceuil/', views.acceuil, name='acceuil'),
 
     #URL MENANT VERS LE DASHBOARD
     path('dash/', views.dash, name='dash'),
@@ -14,11 +14,12 @@ urlpatterns = [
 
 # URL MENANT VERS LE FORMULAIRE D'AJOUT DES CLIENTS
     path('ajoutArticle/', views.ajoutArticle, name='ajoutArticle'),
+    path('ajoutStock/', views.ajoutStock, name='ajoutStock'),
 
     path('ajoutClient/', views.ajoutClient, name='ajoutClient'),
 
 #URL MENANT VERS LA PAGE DE LISTE ARTICLE
-    path('listeArticle/', views.listeArticle, name='listeArticle'),
+    path('', views.listeArticle, name='listeArticle'),
     path('articles/', views.articles, name='articles'),
 
 #URL MENANT VERS LA PAGE DE LISTE CATEGORIE
@@ -42,5 +43,15 @@ urlpatterns = [
 
 
     path("ajoutPanier/", views.ajoutPanier, name="ajoutPanier"),
+    path("panier_view/", views.panier_view, name="panier_view"),
+    path("listePanier/", views.listePanier, name="listePanier"),
+    path("listeAchat/", views.listeAchat, name="listeAchat"),
+
+    path("newPanier/", views.newPanier, name="newPanier"),
+    path("articleAuPanier/", views.articleAuPanier, name="articleAuPanier"),
+    path("panierNonValide/", views.panierNonValide, name="panierNonValide"),
+
+    path('supprimerPanier/<int:id>',views.supprimerPanier, name='supprimerPanier'),
+
 
 ]

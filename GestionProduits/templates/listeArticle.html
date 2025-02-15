@@ -101,7 +101,9 @@
             {% endif %}
         </div>
         <h2 class="text-center">LES ARTICLES {{ total }} </h2>
+
         <div class="text-end mb-3">
+             <a href="{% url 'newPanier' %}" class="btn btn-success">Créer Panier</a>
             <a href="{% url 'ajoutArticle' %}" class="btn btn-primary">Nouvelle  Article</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
         </div>
@@ -120,7 +122,6 @@
 
 
                     <p><strong>Prix:</strong> {{ article.prixUnitaire }} FCFA</p>
-
                     <p><strong>Catégorie:</strong> {{ article.categorie.titre }}</p>
                     <p><strong>Stock:</strong> {{ article.stock }}</p>
                 {% comment %}
@@ -136,42 +137,41 @@
                     <p><em>Aucune image disponible</em></p>
                     {% endif %}
                     </div>
-                    <form action="" method="POST">
+                    <form action="{% url 'ajoutStock' %}" method="POST">
                         <div class="add-stock">
 
-
-                            <input  class="form-control" type="number" min="1" placeholder="Qté à ajouter">
-
+                            <input name="Stock" class="form-control" type="number" min="1" placeholder="Qté à ajouter">
                             <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-success"> Ajouter Stock</a>
 
-
                         </div>
                     </form>
 
 
-                    <form action="" method="POST">
+                    <!-- Formulaire d'ajout au panier -->
+                <form action="{% url 'ajoutPanier' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="article_id" value="{{ article.id }}">
 
-                        <div class="btn-actions">
-                        {% comment %}
-                        <a href="{% url 'modifierArticle' article.id %}"  class="btn btn-warning"><i class="fas fa-edit" ></i></a>
-                        <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer le produit ?');"  class="btn btn-danger"><i class="fas fa-trash" ></i></a>
-                    {% endcomment %}
+                    <div class="btn-actions">
+                        <input type="number" name="quantite" placeholder="Qte à payer" min="1" class="form-control" required>
+
+                        <select class="form-select" name="panierId" required {% if not paniers %} disabled {% endif %}>
+                            <option disabled selected>Choisir un panier</option>
+                            {% for panier in paniers %}
+                                <option value="{{ panier.id }}">{{ panier.client.nomClient }} --- Créer le {{ panier.dateCreation|date:"d/m/Y H:i" }} </option>
+                            {% endfor %}
+                            {% if not paniers %}
+                                <option value="#">Aucun panier disponible</option>
+                            {% endif %}
+                        </select>
+
+                        <button type="submit" class="btn btn-dark" {% if not paniers %} disabled {% endif %}>
+                            Panier+ <i class="fas fa-shopping-cart"></i>
+                        </button>
+                    </div>
+                </form>
 
 
-                            <input type="number" placeholder="Qte à payer" min="0" class="form-control" >
-                            <select class="form-select" name="" id="">
-                                <option disabled selected >Select</option>
-                                <option value="1">panier1</option>
-                                <option value="2">panier2</option>
-                                <option value="3">panier3</option>
-                            </select>
-                            
-                            <a style="color: white"  class="btn btn-dark" href="#" >Panier+<i class="fas fa-shopping-cart"></i> </a>
-
-
-
-                        </div>
-                    </form>
                 </div>
             </div>
             {% empty %}

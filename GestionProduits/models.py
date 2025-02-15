@@ -100,7 +100,7 @@ class Categorie(models.Model):
         # Vérifie si après suppression des séparateurs, il ne reste que des chiffres
         if titre_sans_separateurs.isdigit():
             raise ValidationError(
-                {"titre": "Le titre ne doit pas être un nombre entier ou décimal. Il doit contenir des lettres."})
+                 "Le titre ne doit pas être un nombre entier ou décimal. Il doit contenir des lettres.")
 
         # S'assure que le titre commence par une majuscule
         self.titre = capfirst(self.titre)
@@ -168,18 +168,32 @@ class Client(models.Model):
     telephone = models.CharField(validators=[phone_validateur], unique=True, null=True, blank=True)
     dateInscription = models.DateTimeField(auto_now_add=True)
 
+    def clean(self):
+        if self.telephone:
+            existing_client = Client.objects.filter(telephone=self.telephone).exclude(id=self.id).first()
+            if existing_client:
+                raise ValidationError({"telephone": "Ce numéro de téléphone est déjà utilisé par un autre client."})
+
+    def __str__(self):
+         return self.nomClient
     class Meta:
         ordering = ['-dateInscription']
+
+
+    def clean(self):
+        if self.telephone:
+            existing_client = Client.objects.filter(telephone=self.telephone).exclude(id=self.id).first()
+            if existing_client:
+                raise ValidationError({"telephone": "Ce numéro de téléphone est déjà utilisé par un autre client."})
 
 
 #classe Panier : un ensemble d'achats d'un client spécifique à un moment spécifique(date)
 class Panier(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="paniers", null=True,blank=True)
-    NouveautNomClient = models.CharField(max_length=128, null=True, blank=True)
-    NouveauTelephoneClient =  models.CharField(validators=[phone_validateur], unique=True, null=True, blank=True)
-    dateCreation = models.DateTimeField(auto_now_add=True)
     valide = models.BooleanField(default=False)
     totalAchat = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True)
+    dateCreation = models.DateTimeField(auto_now_add=True)
+
 
     class Meta:
         ordering = ['-dateCreation']
@@ -202,7 +216,7 @@ class Panier(models.Model):
 
 #classe Achat : composition de panier
 class Achat(models.Model):
-    #client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="achatClient")
+
     panier = models.ForeignKey(Panier, on_delete=models.CASCADE, related_name="achatClient")
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="achat")
     dateCommande = models.DateTimeField(auto_now_add=True)
