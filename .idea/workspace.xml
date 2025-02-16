@@ -6,6 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/static/assets/img/dashboard.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/static/assets/img/logo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/panierNonvalide.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/panierNonvalide.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

@@ -11,9 +11,10 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib.utils import ImageReader
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
+from django.conf import settings
 import os
 import datetime
 
@@ -554,7 +555,7 @@ def listeTransaction(request):
 def genererFacture(request, panier_id):
     panier = get_object_or_404(Panier, id=panier_id)
     response = HttpResponse(content_type='application/pdf')
-    numero_facture = f"FACT-{datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')}-{panier.id:03d}"
+    numero_facture = f"FACT-{datetime.datetime.now().strftime('%Y%m%d')}-{panier.id:03d}"
     response['Content-Disposition'] = f'attachment; filename="{numero_facture}.pdf"'
 
     doc = SimpleDocTemplate(response, pagesize=A4)
@@ -562,17 +563,52 @@ def genererFacture(request, panier_id):
     styles = getSampleStyleSheet()
 
     # Ajout du logo
-    logo_path = os.path.join("static", "assets", "img", "log.png")
-    if os.path.exists(logo_path):
-        logo = ImageReader(logo_path)
-        elements.append(logo)
 
+
+    #logo_path = os.path.join(settings.BASE_DIR, "static", "img", "log.png")
+    #logo_path = os.path.join("static", "img", "log.png")
+
+    logo_path = os.path.abspath(os.path.join("GestionProduits", "static", "img", "log.png"))
+    #print("Chemin du logo :", logo_path)
+    #print("Le fichier existe :", os.path.exists(logo_path))
+
+    if os.path.exists(logo_path):
+        logo = Image(logo_path, width=100, height=50)  # Ajuste la taille du logo
+
+
+        nom_entreprise = Paragraph('<font color="white"><b>Raïssa Shop</b></font>', styles['Title'])
+
+        # Informations de contact à droite
+        info_contact = Paragraph(
+            '<font color="white"><b>Adresse : Agoe Nyivé non loin d\'Institut SIVOP<br/></b></font>'
+            '<font color="white"><b>Téléphone : +228 90326791</b></font>',
+            styles['Normal']
+        )
+
+        # Créer un tableau avec 3 colonnes pour aligner le tout à droite
+        header_table = Table([[logo, nom_entreprise, info_contact]], colWidths=[70, 150, 280])
+
+        # Appliquer un style pour aligner au centre verticalement
+        header_table.setStyle([
+            ('BACKGROUND', (0, 0), (-1, -1), colors.blue),  # Fond bleu
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),  # Centrer verticalement
+            ('ALIGN', (1, 0), (1, 0), 'RIGHT'),  # Logo aligné à droite
+            ('ALIGN', (2, 0), (2, 0), 'LEFT'),  # Nom aligné à gauche après le logo
+            ('ALIGN', (3, 0), (3, 0), 'RIGHT'),  # Contact aligné à droite
+            ('TEXTCOLOR', (1, 0), (1, 0), colors.whitesmoke),  # Texte en blanc
+            #('LEFTPADDING', (0, 0), (-1, -1), 0),  # Supprime l’espace à gauche
+            #('RIGHTPADDING', (0, 0), (-1, -1), 0),  # Supprime l’espace à droite
+        ])
+
+        elements.append(header_table)  # Ajoute le tableau au document
+        elements.append(Spacer(1, 10))
     # Titre de la facture
-    elements.append(Paragraph(f"<b>Facture: {numero_facture}</b>", styles['Title']))
+    #styles['Title'].alignment = 0
+    elements.append(Paragraph(f"<b>{numero_facture}</b>", styles['Title']))
     elements.append(Spacer(1, 12))
 
     # Infos du vendeur
-    elements.append(Paragraph("<b>Vendeur:Tata Raïssa</b>Boutique : Raïssa, Adresse :Agoe Nyivé non loin d'Institut SIVOP, Téléphone:+228 90326791", styles['Normal']))
+    #elements.append(Paragraph("<b>Gérant:Tata Raïssa,</b> Adresse :Agoe Nyivé non loin d'Institut SIVOP, Téléphone:+228 90326791", styles['Normal']))
     elements.append(Spacer(1, 12))
 
     # Infos du client
