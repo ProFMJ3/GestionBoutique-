@@ -9,20 +9,13 @@ from .models import Categorie, Article, Client, Panier, Achat,Transactions
 from  django.db.models import Count
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-
-from reportlab.pdfgen import canvas
-
-
-
-
-from django.shortcuts import get_object_or_404
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.utils import ImageReader
-from reportlab.platypus import Table, TableStyle
-import  os
-
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+import os
+import datetime
 
 # git config --global core.autocrlf true
 
@@ -561,30 +554,35 @@ def listeTransaction(request):
 def genererFacture(request, panier_id):
     panier = get_object_or_404(Panier, id=panier_id)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="facture_{panier.id}.pdf"'
+    numero_facture = f"FACT-{datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')}-{panier.id:03d}"
+    response['Content-Disposition'] = f'attachment; filename="{numero_facture}.pdf"'
 
-    # Définition du document PDF
-    p = canvas.Canvas(response, pagesize=A4)
-    width, height = A4
+    doc = SimpleDocTemplate(response, pagesize=A4)
+    elements = []
+    styles = getSampleStyleSheet()
 
-    # Ajouter un logo
-    logo_path = os.path.join("static", "images", "logo.png")  # Change selon ton chemin réel
+    # Ajout du logo
+    logo_path = os.path.join("static", "assets", "img", "log.png")
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
-        p.drawImage(logo, 50, height - 100, width=100, height=100, mask='auto')
+        elements.append(logo)
 
     # Titre de la facture
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(200, height - 80, f"Facture - Panier #{panier.id}")
+    elements.append(Paragraph(f"<b>Facture: {numero_facture}</b>", styles['Title']))
+    elements.append(Spacer(1, 12))
+
+    # Infos du vendeur
+    elements.append(Paragraph("<b>Vendeur:Tata Raïssa</b>Boutique : Raïssa, Adresse :Agoe Nyivé non loin d'Institut SIVOP, Téléphone:+228 90326791", styles['Normal']))
+    elements.append(Spacer(1, 12))
 
     # Infos du client
-    p.setFont("Helvetica", 12)
-    p.drawString(50, height - 120, f"Client : {panier.client.nomClient}")
-    p.drawString(50, height - 140, f"Date : {panier.dateCreation.strftime('%d/%m/%Y')}")  # Ajoute la date
+    elements.append(Paragraph(f"<b>Client :</b> {panier.client.nomClient}", styles['Normal']))
+    elements.append(Paragraph(f"<b>Date :</b> {panier.dateCreation.strftime('%d/%m/%Y %H:%M:%S')}", styles['Normal']))
+    elements.append(Spacer(1, 12))
 
     # Récupération des articles
     achats = panier.achatClient.all()
-    data = [["Article", "Quantité", "Prix Unitaire (FCFA)", "Total (FCFA)"]]  # En-têtes du tableau
+    data = [["Article", "Quantité", "Prix Unitaire (FCFA)", "Total (FCFA)"]]
     total = 0
 
     for achat in achats:
@@ -592,10 +590,8 @@ def genererFacture(request, panier_id):
         data.append([achat.article.nom, achat.quantite, achat.article.prixUnitaire, total_article])
         total += total_article
 
-    # Ajout de la ligne du total
     data.append(["", "", "Total :", total])
 
-    # Création du tableau
     table = Table(data, colWidths=[200, 80, 100, 100])
     style = TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
@@ -607,13 +603,11 @@ def genererFacture(request, panier_id):
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
     ])
     table.setStyle(style)
+    elements.append(table)
+    elements.append(Spacer(1, 20))
 
-    # Position du tableau
-    table.wrapOn(p, width, height)
-    table.drawOn(p, 50, height - 300)
+    # Signature électronique
+    elements.append(Paragraph("Signature du vendeur: ________________________", styles['Normal']))
 
-    # Finalisation et enregistrement du fichier PDF
-    p.showPage()
-    p.save()
+    doc.build(elements)
     return response
-
