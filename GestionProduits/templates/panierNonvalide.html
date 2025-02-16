@@ -35,11 +35,18 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h2 {
+        h1, h2 {
             text-align: center;
             color: #007bff;
             font-family: "Times New Roman", serif;
             margin-bottom: 20px;
+        }
+
+         h2 {
+            text-align: center;
+            color: black;
+            font-family: "Times New Roman", serif;
+            margin-top: 50px;
         }
 
         table {
@@ -81,11 +88,19 @@
             font-weight: bold;
 
         }
+
+        .center{
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Liste des clients</h2>
+        <h1>Paniers non validés </h1>
 
         <div class="btn-container">
             <div class="message">
@@ -113,12 +128,21 @@
         </div>
 
 
-    <h1>Paniers non validés </h1>
+
 
     {% for panier in paniersEnCours %}
         <h2>Panier #{{ panier.id }} - Client : {{ panier.client.nomClient }}</h2>
-        <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
-        <a href="{% url 'genererFacture' panier.id %} "class="btn-primary btn" ><strong>Générer Facture</strong> </a>
+        <div class="center">
+            <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
+            <p><strong>Statut :</strong> {{ panier.valide }} </p>
+
+            <form action="">
+
+
+                <button class="btn-success btn" type="submit" >Valider Panier</button>
+            </form>
+            <a href="{% url 'genererFacture' panier.id %}" class="btn-primary btn" ><strong>Générer Facture</strong> </a>
+        </div>
 
         <table>
             <thead>

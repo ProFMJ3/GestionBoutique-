@@ -580,7 +580,7 @@ def genererFacture(request, panier_id):
     # Infos du client
     p.setFont("Helvetica", 12)
     p.drawString(50, height - 120, f"Client : {panier.client.nomClient}")
-    p.drawString(50, height - 140, f"Date : {panier.dateCreation.strftime('%d/%m/%Y')}")  # Ajoute la date
+    p.drawString(50, height - 140, f"Date : {panier.dateCreation.strftime('%d/%m/%Y:%H:%M:%s')}")  # Ajoute la date
 
     # Récupération des articles
     achats = panier.achatClient.all()

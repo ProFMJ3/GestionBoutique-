@@ -90,7 +90,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Liste des clients</h2>
+        <h2>Liste des Paniers</h2>
 
         <div class="btn-container">
             <div class="message">
@@ -111,8 +111,8 @@
             </form>
 
 
-            <a href="{% url 'ajoutClient' %}" class="btn-primary">Nouveau Article</a>
-            <a href="{% url 'acceuil' %}" class="btn-primary">Acceuil</a>
+            <a href="{% url 'newPanier' %}" class="btn-primary">Nouveau Panier</a>
+            <a href="{% url 'listeArticle' %}" class="btn-primary">Liste des articles </a>
         </div>
 
         </div>
@@ -126,13 +126,6 @@
         <div class="center">
             <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
 
-            <form action="">
-                <select name="statut" class="form-select" id="statut" {% if not panier.valide == "True" %} disabled {% endif %}>
-
-                    <option value="False">False</option>
-                    <option  value="True">True</option>
-                </select>
-            </form>
             <a class="btn-primary btn" ><strong>Générer Facture</strong> </a>
         </div>
 
