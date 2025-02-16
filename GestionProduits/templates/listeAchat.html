@@ -85,7 +85,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Liste des clients</h2>
+        <h2>Liste des achats</h2>
 
         <div class="btn-container">
             <div class="message">
@@ -113,6 +113,7 @@
         </div>
 
         </div>
+        <p> <strong> Total d'achat : {{ totalAchat }}</strong> </p>
 
         <table>
             <thead>
@@ -122,24 +123,26 @@
                     <th>Article</th>
                     <th>Qté achetée</th>
                     <th>Prix Achat</th>
+                    <th>Panier Achat</th>
                     <th>Date Achat</th>
                     <th class="text-center" >Action</th>
 
                 </tr>
             </thead>
             <tbody>
-                {% for achat in  achats %}
+                {% for achat in   achats %}
                     <tr>
-
                         <td>{{ achat.client }}  </td>
-                        <td>{{ achat.article }} </td>
+                        <td>{{ achat.article.nom }} </td>
                         <td>{{ achat.quantite  }}</td>
                         <td>{{ achat.prixAchat  }}</td>
-                        <td>{{ client.dateCommande }} </td>
+                        <td>{{ achat.panier.id }} </td>
+                        <td>{{ achat.dateCommande }} </td>
+
                         <td class="text-center" >
                             <a href="{% url 'modifierClient' achat.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
-                            <a href="{% url 'supprimerClient' achat.i %}" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
-                            <a href="{% url 'supprimerClient' achat.i %}" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
+
+                            <a href="{% url 'supprimerClient' achat.id %}" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
                         </td>
                     </tr>
                 {% empty %}

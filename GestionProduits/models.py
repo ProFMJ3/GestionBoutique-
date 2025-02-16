@@ -168,16 +168,12 @@ class Client(models.Model):
     telephone = models.CharField(validators=[phone_validateur], unique=True, null=True, blank=True)
     dateInscription = models.DateTimeField(auto_now_add=True)
 
-    def clean(self):
-        if self.telephone:
-            existing_client = Client.objects.filter(telephone=self.telephone).exclude(id=self.id).first()
-            if existing_client:
-                raise ValidationError({"telephone": "Ce numéro de téléphone est déjà utilisé par un autre client."})
+    class Meta:
+        ordering = ['-dateInscription']
 
     def __str__(self):
          return self.nomClient
-    class Meta:
-        ordering = ['-dateInscription']
+
 
 
     def clean(self):
@@ -189,7 +185,9 @@ class Client(models.Model):
 
 #classe Panier : un ensemble d'achats d'un client spécifique à un moment spécifique(date)
 class Panier(models.Model):
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="paniers", null=True,blank=True)
+    #matricule = models.CharField(unique=True, )
     valide = models.BooleanField(default=False)
     totalAchat = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True)
     dateCreation = models.DateTimeField(auto_now_add=True)
@@ -258,6 +256,28 @@ class Facture(models.Model):
 
     def __str__(self):
         return f"Facture {self.numero} - {self.panier} - {self.prixTotalAchat}FCFA"
+
+
+class Transactions(models.Model):
+
+    operateur_Choix = (
+        ('Moov', 'Moov'),
+        ('Yas', 'Yas'),
+    )
+    operation_Choix = (
+        ('Retrait', 'Retrait'),
+        ('Dépot', 'Dépot'),
+    )
+
+    #client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="transactions")
+    telephone = models.CharField(validators=[phone_validateur])
+    operateur = models.CharField(choices=operateur_Choix)
+    operation = models.CharField(choices=operation_Choix)
+    montant = models.DecimalField(max_digits=1000, decimal_places=2)
+    dateTransaction = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+
+    
 
 
 

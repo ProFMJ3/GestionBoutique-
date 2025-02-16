@@ -118,7 +118,7 @@
     {% for panier in paniersEnCours %}
         <h2>Panier #{{ panier.id }} - Client : {{ panier.client.nomClient }}</h2>
         <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
-        <a class="btn-primary btn" ><strong>Générer Facture</strong> </a>
+        <a href="{% url 'genererFacture' panier.id %} "class="btn-primary btn" ><strong>Générer Facture</strong> </a>
 
         <table>
             <thead>

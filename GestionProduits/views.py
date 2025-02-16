@@ -1,17 +1,27 @@
-from itertools import count
 
-from django.db.models.fields import return_None
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.contrib import messages
 
-from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm, PanierForm
+from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm, PanierForm, TransactionForm
 
-from .models import Categorie, Article, Client, Panier, Achat
+from .models import Categorie, Article, Client, Panier, Achat,Transactions
 from  django.db.models import Count
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
-import json
+
+from reportlab.pdfgen import canvas
+
+
+
+
+from django.shortcuts import get_object_or_404
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.utils import ImageReader
+from reportlab.platypus import Table, TableStyle
+import  os
 
 
 # git config --global core.autocrlf true
@@ -267,7 +277,7 @@ def supprimerArticle(request, id):
 
 
 
-# LA VUE POUR AJOUTER UNE NOUVELLE CATEGORIE
+# LA VUE POUR AJOUTER UN NOUVEAU CLIENT
 def ajoutClient(request):
     if request.method == 'POST':
 
@@ -279,7 +289,9 @@ def ajoutClient(request):
                 nomClient  = formClient.cleaned_data['nomClient']
                 adresse = formClient.cleaned_data['adresse']
                 tel = formClient.cleaned_data['telephone']
+
                 client = Client(nomClient=nomClient, adresse=adresse, telephone=tel)
+                client.full_clean()
                 client.save()
                 messages.success(request, f"Client {client.nomClient} ajouté avec succès !")
                 return redirect('listeClient')  # Redirection vers la page de liste des catégories
@@ -390,7 +402,7 @@ def ajoutPanier(request):
 
         #client = Client.objects.get(id=client_id)
 
-        panier = Panier.objects.get_or_create(id=panierId, valide=False)
+        panier = Panier.objects.get(id=panierId, valide=False)
 
         achat_existant = Achat.objects.filter(panier=panier, article=article).first()
 
@@ -417,14 +429,9 @@ def ajoutPanier(request):
         article.save()
 
         panier.calculeTotal()
-        panier.save()
 
-
-
-        return JsonResponse({"success": True, "message": "Article ajouté au panier avec succès !"})
-
-    redirect('listeArticle')
-    #return JsonResponse({"success": False}, status=400)
+        messages.success(request, f"{article.nom} est bien ajouté au panier {panier.client.nomClient}")
+        return redirect('listeArticle')
 
 def panier_view(request):
     clients = Client.objects.all()
@@ -448,16 +455,11 @@ def listeAchat(request):
     achats = Achat.objects.all()
     totalAchat = achats.count()
 
-    context = {" achats":  achats, 'totalAchat': totalAchat}
-    if not  achats.exists():
-        message = "Aucun client n'est enregistré"
-        totalAchat = 0
-
-        return render(request, "listeAchat.html", {"message": message, 'totalAchat': totalAchat})
+    context = {"achats":  achats, 'totalAchat': totalAchat}
 
     return render(request, "listeAchat.html", context)
 
-
+#Créer un nouveau panier
 def newPanier(request):
     if request.method == "POST":
         formPanier = PanierForm(request.POST)
@@ -474,6 +476,7 @@ def newPanier(request):
 
             panier = Panier(client=client)
             panier.save()
+            messages.success(request, f"Panier de {client.nomClient} est crée avec succès")
             return redirect('listeArticle')
 
     else:
@@ -500,25 +503,6 @@ def panierNonValide(request):
     return render(request, 'panierNonvalide.html', {'paniersEnCours': paniersEnCours})
 
 
-def articleAuPanier(request):
-    if request.method == "POST":
-        quantite = request.POST.get("quantite")
-        panier_id = request.POST.get("panierId")
-
-        try:
-            panier = Panier.objects.get(id=panier_id)
-            quantite = int(quantite)
-
-
-            # Ajouter l'achat au panier...
-            messages.success(request, "Article ajouté au panier avec succès !")
-
-        except Panier.DoesNotExist:
-            messages.error(request, "Le panier sélectionné n'existe pas.")
-
-        return redirect('listeArticle')
-
-    return JsonResponse({"success": False}, status=400)
 
 def supprimerPanier(request, id):
     if request.method == 'GET':
@@ -528,4 +512,108 @@ def supprimerPanier(request, id):
         return redirect('listePanier')
     else:
         return HttpResponse("Méthode non autorisée", status=405)
+
+
+
+# LA VUE POUR AJOUTER UNE NOUVELLE CATEGORIE
+def ajoutTransaction(request):
+    if request.method == 'POST':
+
+        formTransaction = TransactionForm(request.POST)
+
+        if formTransaction.is_valid():
+            try:
+
+                telephone  = formTransaction.cleaned_data['telephone']
+                operateur = formTransaction.cleaned_data['operateur']
+                operation = formTransaction.cleaned_data['operation']
+                montant = formTransaction.cleaned_data['montant']
+
+                transaction = Transactions(telephone=telephone, operateur=operateur,operation=operation, montant=montant)
+
+                transaction.save()
+                messages.success(request, f"Transaction : {operation} de {montant} du client {transaction.telephone} : {transaction.dateTransaction} est ajouté avec succès !")
+                return redirect('listeTransaction')  # Redirection vers la page de liste des catégories
+            except ValidationError as e:
+                for field, errors in e.message_dict.items():
+                    formTransaction.add_error(field, errors)
+        else:
+            for field, errors in formTransaction.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+
+    else:
+        formTransaction = TransactionForm()
+
+    return render(request, 'ajoutTransaction.html', {'formTransaction': formTransaction})
+
+def listeTransaction(request):
+    transactions = Transactions.objects.all()
+    totalTrans = transactions.count()
+
+    context = {"transactions":  transactions, 'totalTrans': totalTrans}
+
+    return render(request, "listeTransatcion.html", context)
+
+
+
+
+def genererFacture(request, panier_id):
+    panier = get_object_or_404(Panier, id=panier_id)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="facture_{panier.id}.pdf"'
+
+    # Définition du document PDF
+    p = canvas.Canvas(response, pagesize=A4)
+    width, height = A4
+
+    # Ajouter un logo
+    logo_path = os.path.join("static", "images", "logo.png")  # Change selon ton chemin réel
+    if os.path.exists(logo_path):
+        logo = ImageReader(logo_path)
+        p.drawImage(logo, 50, height - 100, width=100, height=100, mask='auto')
+
+    # Titre de la facture
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(200, height - 80, f"Facture - Panier #{panier.id}")
+
+    # Infos du client
+    p.setFont("Helvetica", 12)
+    p.drawString(50, height - 120, f"Client : {panier.client.nomClient}")
+    p.drawString(50, height - 140, f"Date : {panier.dateCreation.strftime('%d/%m/%Y')}")  # Ajoute la date
+
+    # Récupération des articles
+    achats = panier.achatClient.all()
+    data = [["Article", "Quantité", "Prix Unitaire (FCFA)", "Total (FCFA)"]]  # En-têtes du tableau
+    total = 0
+
+    for achat in achats:
+        total_article = achat.quantite * achat.article.prixUnitaire
+        data.append([achat.article.nom, achat.quantite, achat.article.prixUnitaire, total_article])
+        total += total_article
+
+    # Ajout de la ligne du total
+    data.append(["", "", "Total :", total])
+
+    # Création du tableau
+    table = Table(data, colWidths=[200, 80, 100, 100])
+    style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+    ])
+    table.setStyle(style)
+
+    # Position du tableau
+    table.wrapOn(p, width, height)
+    table.drawOn(p, 50, height - 300)
+
+    # Finalisation et enregistrement du fichier PDF
+    p.showPage()
+    p.save()
+    return response
 

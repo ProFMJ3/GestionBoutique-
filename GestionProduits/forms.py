@@ -103,3 +103,45 @@ class PanierForm(forms.Form):
     client = forms.ModelChoiceField(label="Selectionnez le client", required=True, queryset = Client.objects.all())
     #NouveauNomClient = forms.CharField(label="Entrez le nom du client s'il n'existe pas ")
     #NouveauTelephoneClient = forms.CharField(label="Entrez le contact du nouveau client ")
+
+
+
+class TransactionForm(forms.Form):
+    operateur_Choix = (
+        ('Moov', 'Moov'),
+        ('Yas', 'Yas'),
+    )
+    operation_Choix = (
+        ('Retrait', 'Retrait'),
+        ('Dépot', 'Dépot'),
+    )
+
+    #client = forms.ModelChoiceField(label="Sélectionnez le client :", required=False, queryset=Client.objects.all(),
+                               #widget=forms.Select(attrs={
+                                  # 'placeholder': 'Ex : +22879405199',
+                                  # 'class': 'form-control',
+                               #}))
+
+    telephone = forms.CharField(label="Numéro de téléphone du client :", required=False,
+                               widget=forms.TextInput(attrs={
+                                   'placeholder': 'Ex : +22879405199',
+                                   'class': 'form-control',
+                               }))
+    operateur = forms.ChoiceField(choices=operateur_Choix,required=True,
+                                widget=forms.Select(attrs={
+                                    'class': 'form-select',
+                                }))
+    operation = forms.ChoiceField(choices=operation_Choix, required=True,
+                                widget=forms.Select(attrs={
+                                    'class': 'form-select',
+                                }))
+
+    montant = forms.DecimalField(label="Montant :", required=False,
+                                widget=forms.TextInput(attrs={
+                                    'placeholder': 'Ex : 100000',
+                                    'class': 'form-control',
+                                }))
+
+
+
+

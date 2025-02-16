@@ -85,7 +85,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Liste des articles</h2>
+        <h2>Liste des transaction</h2>
 
         <div class="btn-container">
             <div class="message">
@@ -95,7 +95,8 @@
                     {% endfor %}
                     {% endif %}
                 </div>
-        <div class="tete d-flex gap-3">
+
+           <div class="tete d-flex gap-3">
 
 
 
@@ -107,50 +108,42 @@
             </form>
 
 
-            <a href="{% url 'ajoutArticle' %}" class="btn-primary">Nouveau Article</a>
+            <a href="{% url 'ajoutTransaction' %}" class="btn-primary">Nouvelle Transaction</a>
             <a href="{% url 'acceuil' %}" class="btn-primary">Acceuil</a>
         </div>
 
         </div>
-        <p> <strong> Total d'article : {{ total }}</strong> </p>
 
         <table>
             <thead>
                 <tr>
 
-                    <th>Nom</th>
-                    <th>Prix</th>
-                    <th>Stock</th>
-                    <th>Image</th>
-                    <th>Catégorie</th>
-                    <th>Date Ajout</th>
-
+                    <th>Telephone</th>
+                    <th>Opérateur</th>
+                    <th>Opération</th>
+                    <th>Montant</th>
+                    <th>Date Transaction</th>
                     <th class="text-center" >Action</th>
 
                 </tr>
             </thead>
             <tbody>
-                {% for article in articles %}
+                {% for transaction in transactions %}
                     <tr>
 
-                        <td>{{ article.nom }}  </td>
-                        <td>{{ article.prixUnitaire }} </td>
-                        <td>{{ article.stock  }}</td>
-                        {% if  article.image %}
-                           <td><img src="{{ article.image.url }}" alt="Image de {{ article.nom }}" style="max-width: 100px; max-height: 50px;" class="product-image"> </td>
-                        {% else %}
-                            <td><em>Aucune image disponible</em></td>
-                    {% endif %}
-                        <td>{{ article.categorie }} </td>
-                        <td>{{ article.dateAjout }} </td>
+                        <td>{{ transaction.telephone }}  </td>
+                        <td>{{ transaction.operateur }} </td>
+                        <td>{{ transaction.operation}}</td>
+                        <td>{{ transaction.montant}}</td>
+                        <td>{{ transaction.dateTransaction }} </td>
                         <td class="text-center" >
-                            <a href="{% url 'modifierArticle' article.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
-                            <a href="{% url 'supprimerArticle' article.id %}" onclick="return confirm('Voulez-vous supprimer l\'article ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
+                            <a href="#" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
+                            <a href="#" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="3" style="text-align: center;">Aucun client trouvé</td>
+                        <td colspan="3" style="text-align: center;">Aucune  transaction trouvée</td>
                     </tr>
                 {% endfor %}
             </tbody>

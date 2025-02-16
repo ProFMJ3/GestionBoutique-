@@ -48,10 +48,16 @@ urlpatterns = [
     path("listeAchat/", views.listeAchat, name="listeAchat"),
 
     path("newPanier/", views.newPanier, name="newPanier"),
-    path("articleAuPanier/", views.articleAuPanier, name="articleAuPanier"),
+
     path("panierNonValide/", views.panierNonValide, name="panierNonValide"),
 
+    path('genererFacture/<int:panier_id>', views.genererFacture, name='genererFacture'),
+    
     path('supprimerPanier/<int:id>',views.supprimerPanier, name='supprimerPanier'),
+
+    path("ajoutTransaction/", views.ajoutTransaction, name="ajoutTransaction"),
+
+    path('listeTransaction/',views.listeTransaction, name='listeTransaction'),
 
 
 ]

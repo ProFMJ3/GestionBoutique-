@@ -110,29 +110,35 @@
 </head>
 <body>
 
-    <form action=" {% url 'modifierClient' client.id %} " method="POST" enctype="multipart/form-data" >
+    <form action=" {% url 'ajoutTransaction' %} " method="POST" enctype="multipart/form-data" >
 
         <div class="btn-cont">
 
                 <div class="btn-acceuil">
                     <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
                 </div>
-
+                <div class="message">
+                    {% if messages %}
+                    {% for message in messages %}
+                        <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                    {% endfor %}
+                    {% endif %}
+                </div>
 
                 <div class="btn-liste">
-                    <a href=" {% url "listeClient" %} " class="btn btn-primary">Liste Client</a>
+                    <a href=" {% url "listeTransaction" %} " class="btn btn-primary">Liste Transaction</a>
                 </div>
 
             </div>
 
         <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
 
-            <marquee behavior="" direction=""><h2>MODIFICATION CLIENT</h2></marquee>
+            <marquee behavior="" direction=""><h2>NOUVELLE TRANSACTION</h2></marquee>
             {% csrf_token %}
-            {{ formClient }}
+            {{ formTransaction }}
 
             <div class="center">
-                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                <button type="submit" class="btn btn-primary">Ajouter Transaction</button>
 
             </div>
 
@@ -141,4 +147,3 @@
     </form>
 </body>
 </html>
-

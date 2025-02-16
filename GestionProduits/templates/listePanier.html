@@ -81,6 +81,11 @@
             font-weight: bold;
 
         }
+        .center{
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -117,8 +122,19 @@
 
     {% for panier in paniers %}
         <h2>Panier #{{ panier.id }} - Client : {{ panier.client.nomClient }}</h2>
-        <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
-        <a class="btn-primary btn" ><strong>Générer Facture</strong> </a>
+        <p><strong>Statut :</strong> {{ panier.valide }} </p>
+        <div class="center">
+            <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
+
+            <form action="">
+                <select name="statut" class="form-select" id="statut" {% if not panier.valide == "True" %} disabled {% endif %}>
+
+                    <option value="False">False</option>
+                    <option  value="True">True</option>
+                </select>
+            </form>
+            <a class="btn-primary btn" ><strong>Générer Facture</strong> </a>
+        </div>
 
         <table>
             <thead>
