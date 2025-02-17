@@ -122,8 +122,8 @@
             </form>
 
 
-            <a href="{% url 'ajoutClient' %}" class="btn-primary">Nouveau Article</a>
-            <a href="{% url 'acceuil' %}" class="btn-primary">Acceuil</a>
+            <a href="{% url 'newPanier' %}" class="btn btn-success">Créer Panier</a>
+            <a href="{% url 'dash' %}" class="btn-primary">Dashbord</a>
         </div>
 
         </div>
@@ -137,12 +137,14 @@
             <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
             <p><strong>Statut :</strong> {{ panier.valide }} </p>
 
-            <form action="">
+            <form action="{% url 'validePanier' panier.id %}" method="POST">
+                {% csrf_token %}
 
-
-                <button class="btn-success btn" type="submit" >Valider Panier</button>
+                <button class="btn btn-success" type="submit"  name="valide" value="True">Valider Panier</button>
             </form>
+            {% comment %}
             <a href="{% url 'genererFacture' panier.id %}" class="btn-primary btn" ><strong>Générer Facture</strong> </a>
+            {% endcomment %}
         </div>
 
         <table>
@@ -169,14 +171,19 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="4">Aucun article dans ce panier.</td>
+                        <td colspan="4">Aucune article dans ce panier.</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
 
     {% empty %}
-        <p>Aucun panier trouvé.</p>
+        <div>
+        <p class="text-center mt-5 mb-5 " >Aucun panier non-validé disponible.</p>
+
+        </div>
+
+
     {% endfor %}
     </div>
 </body>

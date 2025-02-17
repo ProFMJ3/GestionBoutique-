@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FMJShop</title>
+    <title>Raïssa Shop</title>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     {% load static %}
@@ -11,7 +11,9 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <style>
+
          .content{
+
 
              width: 100%;
              height: 100vh;
@@ -34,6 +36,11 @@
             margin-bottom: 30px;
         }
            .panier{
+                background-image: url("{% static 'img/acc1.jpg' %}");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+
                 gap: 50px;
                 width: 80%;
                 height: 80%;
@@ -64,7 +71,7 @@
 <header class="head-content">
    <nav class="navbar navbar-expand-lg body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand btn btn-primary" href="#"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px" > FMJShop</a>
+    <a class="navbar-brand btn btn-primary" href="#"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px" > RaïssaShop</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -108,7 +115,7 @@
         </li>
 
         <li class="nav-item">
-              <a style="background-color: white; color: black" href="{% url "panier_view" %}" aria-current="page" class="btn btn-outline-light">🛒 <i class="fas fa-shopping-cart "></i> Paniers</a>
+              <a style="background-color: white; color: black" href="{% url "panierNonValide" %}" aria-current="page" class="btn btn-outline-light"><i class="fas fa-shopping-cart "></i> Paniers</a>
 
         </li>
 
@@ -123,7 +130,7 @@
 
 
     <div class="content">
-        <h2 class="" >Bienvenue Sur notre Plateforme !!</h2>
+        <h2 class="" >Bienvenue Sur notre Plateforme Raïssa Shop !!</h2>
         <div class="d-flex panier" >
 
 

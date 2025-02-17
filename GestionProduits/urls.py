@@ -50,6 +50,7 @@ urlpatterns = [
     path("newPanier/", views.newPanier, name="newPanier"),
 
     path("panierNonValide/", views.panierNonValide, name="panierNonValide"),
+    path("validePanier/<int:id>", views.validerPanier, name="validePanier"),
 
     path('genererFacture/<int:panier_id>', views.genererFacture, name='genererFacture'),
     

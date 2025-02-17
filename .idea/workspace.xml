@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/static/assets/img/dashboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/static/assets/img/logo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/templates/panierNonvalide.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/panierNonvalide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +51,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
     "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
-    "git-widget-placeholder": "FMJ3",
+    "git-widget-placeholder": "<unknown>",
     "last_opened_file_path": "D:/SEMESTRE3/INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211/PROGRAMME/GestionBoutique",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -129,6 +130,7 @@
       <workItem from="1739549416571" duration="9026000" />
       <workItem from="1739564115147" duration="45529000" />
       <workItem from="1739692876017" duration="467000" />
+      <workItem from="1739747270183" duration="5594000" />
     </task>
     <servers />
   </component>

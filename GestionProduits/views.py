@@ -433,7 +433,7 @@ def panier_view(request):
     return render(request, "ajoutPanier.html", {"clients": clients, "articles": articles})
 
 def listePanier(request):
-    paniers = Panier.objects.all()
+    paniers = Panier.objects.filter(valide=True)
     totalPanier = paniers.count()
 
     context = {"paniers": paniers, 'totalPanier': totalPanier}
@@ -496,6 +496,15 @@ def panierNonValide(request):
 
     return render(request, 'panierNonvalide.html', {'paniersEnCours': paniersEnCours})
 
+def validerPanier(request, id):
+    panier = get_object_or_404(Panier, id=id)
+    if request.method== "POST":
+        valide = request.POST.get("valide")
+        #panier = Panier.objects.update(id =id, valide=valide)
+        panier.valide = valide
+        panier.save()
+
+        return redirect('listePanier')
 
 
 def supprimerPanier(request, id):
@@ -548,6 +557,8 @@ def listeTransaction(request):
     context = {"transactions":  transactions, 'totalTrans': totalTrans}
 
     return render(request, "listeTransatcion.html", context)
+
+
 
 
 
@@ -612,9 +623,9 @@ def genererFacture(request, panier_id):
     elements.append(Spacer(1, 12))
 
     # Infos du client
-    elements.append(Paragraph(f"<b>Client :</b> {panier.client.nomClient}", styles['Normal']))
-    elements.append(Paragraph(f"<b>Date :</b> {panier.dateCreation.strftime('%d/%m/%Y %H:%M:%S')}", styles['Normal']))
-    elements.append(Spacer(1, 12))
+    elements.append(Paragraph(f"<b>Client :</b> {panier.client.nomClient} -- Tel : {panier.client.telephone}", styles['Normal']))
+    elements.append(Paragraph(f"<b>Date et Heure :</b> {panier.dateCreation.strftime('%d/%m/%Y %H:%M:%S')}", styles['Normal']))
+    elements.append(Spacer(1, 20))
 
     # Récupération des articles
     achats = panier.achatClient.all()
