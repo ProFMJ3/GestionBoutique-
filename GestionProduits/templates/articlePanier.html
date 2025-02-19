@@ -29,7 +29,6 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition:0.8s;
             min-height: 400px;
-
         }
 
         .product-card:hover{
@@ -55,11 +54,9 @@
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
-
         }
         .product-card .rien{
             height: 180px;
-
         }
 
         .btn {
@@ -94,7 +91,6 @@
             max-width: 50%;
         }
 
-
     </style>
 </head>
 
@@ -112,10 +108,7 @@
 
         <div class="text-end mb-3">
              <a href="{% url 'newPanier' %}" class="btn btn-success">Créer Panier</a>
-             <a href="{% url 'ajoutClient' %}" class="btn btn-success">Nouveau Client</a>
-            <a href="{% url 'ajoutArticle' %}" class="btn btn-success">Nouvelle  Article</a>
-            <a href="{% url 'articlePanier' %}" class="btn btn-primary">Page d'ajout d'achat au panier</a>
-
+            <a href="{% url 'ajoutArticle' %}" class="btn btn-primary">Nouvelle  Article</a>
             <a href="{% url 'acceuil' %}" class="btn btn-primary">Acceuil</a>
         </div>
         
@@ -145,22 +138,23 @@
                     {% if  article.image %}
                     <img src="{{ article.image.url }}" alt="Image de {{ article.nom }}" style="max-width: 200px; max-height: 150px;" class="product-image">
                     {% else %}
-                        <div class="rien">
+                   <div class="rien">
                             <p><em>Aucune image disponible</em></p>
 
                         </div>
-
                     {% endif %}
                     </div>
+                {% comment %}
                     <form action="{% url 'ajoutStock' article.id %}" method="POST">
                         {% csrf_token %}
                         <div class="add-stock">
-                            <input  name="Stock" class="form-control" type="number" min="1" placeholder="Entrez la quantité" required>
-                            <button class="btn btn-success"> Augmenter la quantité </button>
+                            <input  name="Stock" class="form-control" type="number" min="1" placeholder="Stock à ajouter" required>
+                            <button class="btn btn-success"> Ajouter </button>
                         </div>
                     </form>
+                    {% endcomment %}
 
-        {% comment %}
+
                     <!-- Formulaire d'ajout au panier -->
                 <form action="{% url 'ajoutPanier' %}" method="POST"  >
                     {% csrf_token %}
@@ -172,7 +166,7 @@
                         <select class="form-select" name="panierId" required {% if not paniers %} disabled {% endif %}>
                             <option disabled selected>Choisir un panier</option>
                             {% for panier in paniers %}
-                                <option value="{{ panier.id }}"  >{{ panier.client.nomClient }} --- Créer le {{ panier.dateCreation|date:"d/m/Y H:i" }} </option>
+                                <option value="{{ panier.id }}"  >Panier  {{ panier.numero }} - {% if  panier.client.nomClient %} {{ panier.client.nomClient }} {% else %} . {% endif %}- </option>
                                 <input type="hidden" name="client_id" value="{{ panier.client.id }}">
                             {% endfor %}
                             {% if not paniers %}
@@ -185,7 +179,6 @@
                         </button>
                     </div>
                 </form>
-                {% endcomment %}
 
 
                 </div>

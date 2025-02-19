@@ -97,11 +97,18 @@
             margin-bottom: 20px;
             margin-top: 50px;
         }
+
+        .ajout-panier{
+            display: flex;
+
+            justify-content: center ;
+            align-content: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Paniers non validés </h1>
+        <h1>Paniers en Cours </h1>
 
         <div class="btn-container">
             <div class="message">
@@ -123,6 +130,8 @@
 
 
             <a href="{% url 'newPanier' %}" class="btn btn-success">Créer Panier</a>
+            <a href="{% url 'articlePanier' %}" class="btn btn-primary">Page d'ajout d'achat au panier</a>
+            <a href="{% url 'listePanier' %}" class="btn btn-primary">Voir Paniers Validés</a>
             <a href="{% url 'dash' %}" class="btn-primary">Dashbord</a>
         </div>
 
@@ -132,7 +141,7 @@
 
 
     {% for panier in paniersEnCours %}
-        <h2>Panier #{{ panier.id }} - Client : {{ panier.client.nomClient }}</h2>
+        <h2>Panier {{ panier.numero }} - {% if  panier.client %} Client :{{ panier.client.nomClient }} {% else %} . {% endif %}</h2>
         <div class="center">
             <p><strong>Total :</strong> {{ panier.totalAchat }} FCFA</p>
             <p><strong>Statut :</strong> {{ panier.valide }} </p>
@@ -171,15 +180,18 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="4">Aucune article dans ce panier.</td>
+                        <td colspan="4">Aucun article dans ce panier.</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
+        <div class="ajout-panier gap-3">
+            <a href="{% url 'articlePanier' %}" class="btn btn-outline-success">Ajouter Achat</a>
+            <a href="{% url 'supprimerPanier' panier.id %}" class="btn btn-outline-danger"  onclick="return confirm('Vous voulez vraiment supprimer ce panier en cours ?')" > <i class="fas fa-trash"></i> Supprimer Panier</a>
+        </div>
     {% empty %}
         <div>
-        <p class="text-center mt-5 mb-5 " >Aucun panier non-validé disponible.</p>
+        <p class="text-center mt-5 mb-5 fw-bold " >Aucun panier en cours.</p>
 
         </div>
 

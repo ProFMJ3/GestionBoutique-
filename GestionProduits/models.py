@@ -6,6 +6,7 @@ from django.core.validators import  RegexValidator
 
 import uuid
 import re
+import datetime
 
 import random
 
@@ -130,15 +131,18 @@ class Article(models.Model):
 
     class Meta:
         ordering=['-dateAjout']
+    def clean(self):
+        if self.nom:
+            self.nom = self.nom.strip()
 
-    def controleNom(self):
-        if self.nom.replace(".", "", 1).replace(",", "", 1).replace(";", "", 1).isdigit():
+            # Supprime tous les séparateurs (.,;: et espaces) pour ne garder que les caractères
+            nom_sans_separateurs = re.sub(r'[.,;:\s]', '', self.nom)
 
-            raise  ValidationError ("Le nom du produit ne doit pas un nombre. Plutôt un caractère !!")
+            # Vérifie si après suppression des séparateurs, il ne reste que des chiffres
+            if nom_sans_separateurs.isdigit():
+                raise ValidationError({"nom": "Le nom ne doit pas être un nombre entier ou décimal. Il doit contenir des lettres."})
         else:
-            return self.nom
-
-
+            raise ValidationError({"nom": "Le nom est obligatoire."})
 
     def __str__(self):
         return f"L'article {self.nom} a {self.stock} stock"
@@ -187,25 +191,48 @@ class Client(models.Model):
 class Panier(models.Model):
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="paniers", null=True,blank=True)
-    #matricule = models.CharField(unique=True, )
+    numero = models.CharField(unique=True, max_length=32, null=True, blank=True)
+    #panier.dateCreation.strftime('%Y%m%d')}-{panier.id:05d}
     valide = models.BooleanField(default=False)
     totalAchat = models.DecimalField(max_digits=12, decimal_places=2, default=0, blank=True)
-    dateCreation = models.DateTimeField(auto_now_add=True)
+    dateCreation = models.DateTimeField(auto_now_add=True)  #datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+
 
 
     class Meta:
         ordering = ['-dateCreation']
-    #Fonction pour calculer le total des
+
+    #Fonction pour calculer le total des achats
     def calculeTotal(self):
         """ Calcule et mis à jour le total des achats dU panier """
         total = sum(achat.quantite * achat.article.prixUnitaire for achat in self.achatClient.all())
         self.totalAchat = total  # Stocke le total dans le champ totalAchat
         self.save()  # Enregistre la mise à jour dans la base de données
+
+
         return self.totalAchat  # Retourne la valeur mise à jour
+
+    def totalPaye(self):
+        """Retourne la somme des paiements effectués pour ce panier (via les factures associées)."""
+        total_paye = 0
+        for facture in self.factures.all():  # Accède aux factures associées au panier
+            total_paye += sum(paiement.montant for paiement in facture.paiements.all())  # Somme des paiements de chaque facture
+        return total_paye
+
+    def restant_a_Payer(self):
+        """Retourne le montant restant à payer pour ce panier."""
+        return self.totalAchat - self.totalPaye()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # On enregistre d'abord l'objet pour obtenir son ID
+        if not self.numero:  # Générer le numéro si ce n'est pas encore défini
+            self.numero = f"{self.dateCreation.strftime('%Y%m%d')}-{self.id:04d}"  # AAAAMMJJ-0000id
+            super().save(*args, **kwargs)  # Sauvegarde à nouveau pour mettre à jour le numéro
 
     def __str__(self):
         status = "Validé" if self.valide else "En cours"
-        return f"Panier de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M')} - {status} - Total : {self.totalAchat}FCFA"
+        #return f"Panier de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M')} - {status} - Total : {self.totalAchat}FCFA"
+        return f"Panier de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M:%S')} - Total : {self.totalAchat}FCFA"
 
 
 
@@ -230,6 +257,7 @@ class Achat(models.Model):
         return f"{self.panier.client.nomClient} a acheté {self.quantite} de {self.article.nom} le {self.dateCommande} et le prix de cet achat est {self.prixAchat}"
 
 
+
     def save(self, *args, **kwargs):
         if self.article and self.quantite:
         #Calcule le prix total de l'achat en fonction du prix unitaire de l'article.
@@ -242,20 +270,63 @@ class Achat(models.Model):
 
 
 
-
-
 class Facture(models.Model):
+    choix = [
+        ("Regle", "Réglé"),
+        ("Non_Regle", "Non Régle"),
+    ]
     panier = models.ForeignKey(Panier, related_name="factures", on_delete=models.CASCADE)
 
-    # Numéro unique généré automatiquement
-    numero = models.CharField(max_length=36, unique=True, default=uuid.uuid4, editable=False)
-
-    prixTotalAchat = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    statut = models.BooleanField(default=False)
     dateFacture = models.DateTimeField(auto_now_add=True)
+    montantFacture = models.DecimalField(max_digits=1000, decimal_places=2, null=True, blank=True)
+    statut = models.CharField(choices=choix, null=True, blank=True, default="Non_Regle")
+
+    def totalPaye(self):
+        """Retourne le montant total payé pour cette facture."""
+        return sum(paiement.montant for paiement in self.paiements.all())
+
+
+    def montantRestant(self):
+        """Retourne le montant restant à payer pour cette facture."""
+        return self.montantFacture - self.totalPaye()
+
+    def mettre_a_jour_statut(self):
+        if self.totalPaye() >= self.montantFacture:
+            self.statut = 'regle'
+        else:
+            self.statut = 'non_regle'
+        self.save(update_fields=['statut'])
+
+
+    # Numéro unique généré automatiquement
+    #numero = models.CharField(max_length=36, unique=True, default=uuid.uuid4, editable=False)
+    #prixTotalAchat = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    #statut = models.BooleanField(default=False)
+
 
     def __str__(self):
-        return f"Facture {self.numero} - {self.panier} - {self.prixTotalAchat}FCFA"
+        return f"Facture du panier {self.panier.numero} - état : {self.statut}-montant payé {self.montantFacture} "
+
+
+class ModePaiement(models.Model):
+    choix = [
+        ("Espece", "Espèces"),
+        ("Flooz", "Flooz"),
+        ("Mix by Yas", "Mix by Yas"),
+        ("Cheque_Bancaire", "Chèque Bancaire"),
+    ]
+
+    facture = models.ForeignKey(Facture, null=True, blank=True, on_delete=models.CASCADE, related_name="paiements")
+    moyen = models.CharField(choices=choix, default='Espèce')
+    montant = models.DecimalField(max_digits=1000, decimal_places=2, default=0)
+    datePaiement = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return f"Paiement de {self.montant} FCFA pour la  facture {self.facture.panier.numero} - {self.moyen} "
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.facture.mettre_a_jour_statut()
 
 
 class Transactions(models.Model):
@@ -266,7 +337,7 @@ class Transactions(models.Model):
     )
     operation_Choix = (
         ('Retrait', 'Retrait'),
-        ('Dépot', 'Dépot'),
+        ('Depot', 'Dépot'),
     )
 
     #client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="transactions")

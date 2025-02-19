@@ -2,10 +2,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
+from reportlab.lib.colors import black
+from django.db.models import Sum
 
 from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm, PanierForm, TransactionForm
 
-from .models import Categorie, Article, Client, Panier, Achat,Transactions
+from .models import Categorie, Article, Client, Panier, Achat,Transactions, Facture
 from  django.db.models import Count
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
@@ -26,9 +28,27 @@ import datetime
 def acceuil(request):
     return render(request, 'acceuil.html')
 
-#
-def dash(request):
-    return render(request, 'dash.html')
+#La vue du dashboard
+def dashboard(request):
+    totalArticle = Article.objects.count()
+    totalAchat = Achat.objects.count()
+    paniers = Panier.objects.filter(valide=True)
+    totalPV = paniers.count()
+    totalPN = Panier.objects.filter(valide=False).count()
+
+    # Optimisation de la somme des ventes
+    totalVente = paniers.aggregate(Sum('totalAchat'))['totalAchat__sum'] or 0
+
+    context = {
+        "totalArticle": totalArticle,
+        "totalVente": totalVente,
+        "totalPV": totalPV,
+        "totalPN": totalPN,
+        'totalAchat': totalAchat
+    }
+
+    return render(request, 'dash.html', context)
+
 
 
 #LA VUE POUR AJOUTER UNE NOUVELLE CATEGORIE
@@ -147,21 +167,33 @@ def ajoutArticle(request):
     if request.method == 'POST':
         formArticle = ArticleForm(request.POST, request.FILES)
         if formArticle.is_valid():
-            nom = formArticle.cleaned_data['nom']
-            prixUnitaire = formArticle.cleaned_data['prixUnitaire']
-            categorie = formArticle.cleaned_data['categorie']
-            image = formArticle.cleaned_data['image']
-            stock = formArticle.cleaned_data['stock']
+            try:
 
-            article = Article(nom=nom,  stock=stock,  image=image, prixUnitaire=prixUnitaire, categorie=categorie)
-            article.save()
-            messages.success(request, f"{article.nom} a été Ajouté avec succès")
-            return redirect('listeArticle')  # Redirection vers la page de liste des produits
+                nom = formArticle.cleaned_data['nom']
+                prixUnitaire = formArticle.cleaned_data['prixUnitaire']
+                categorie = formArticle.cleaned_data['categorie']
+                image = formArticle.cleaned_data['image']
+                stock = formArticle.cleaned_data['stock']
+
+                article = Article(nom=nom,  stock=stock,  image=image, prixUnitaire=prixUnitaire, categorie=categorie)
+                article.save()
+
+                messages.success(request, f"{article.nom} a été Ajouté avec succès")
+                return redirect('listeArticle')  # Redirection vers la page de liste des produits
+
+            except ValidationError as e:
+                # Gestion des erreurs de validation
+
+                for field, errors in e.message_dict.items():
+                    formArticle.add_error(field, errors)
+                #messages.error(request, "Erreur lors de l'ajout d'article, veuillez vérifier les informations.")
+
+            except Exception as e:
+                # Gestion des erreurs inattendues
+                messages.error(request, f"Une erreur inattendue s'est produite: {str(e)}")
+
         else:
-            for field, errors in formArticle.errors.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-
+            messages.error(request, f"Une erreur s'est produite!! Veuillez vérifier le formulaire .")
 
     else:
         formArticle = ArticleForm()
@@ -170,10 +202,10 @@ def ajoutArticle(request):
 #LA VUE POUR AFFICHER LES ARTICLES
 def listeArticle(request):
     articles = Article.objects.all()
-    total = articles.count()
-    paniers = Panier.objects.filter(valide=False)
+    #total = articles.count()
+    #paniers = Panier.objects.filter(valide=False)
 
-    context = {"articles": articles, 'total':total, 'paniers':paniers,}
+    context = {"articles": articles}
 
 
     return render(request, "listeArticle.html", context)
@@ -191,6 +223,7 @@ def articles(request):
 
     return render(request, "articles.html", context)
 
+"""
 def ajoutStock(request, idArticle):
     # Récuperation de la ligne dans la table catégorie
     article = get_object_or_404(Article, id=idArticle)
@@ -216,6 +249,7 @@ def ajoutStock(request, idArticle):
         formArticle = ArticleFormM()
     return render(request, 'modifierArticle.html', {'formArticle': formArticle, 'article': article})
 
+"""
 
 #Views pour modifier article
 def modifierArticle(request, idArticle):
@@ -388,44 +422,68 @@ def ajoutPanier(request):
         panierId = request.POST.get("panierId")
         quantite = int((request.POST.get("quantite")))
 
+
         try:
             article = Article.objects.get(id=article_id)
 
         except Article.DoesNotExist:
-            return JsonResponse({"success": False, "message": "Article introuvable"}, status=400)
+            #return JsonResponse({"success": False, "message": "Article introuvable"}, status=400)
+            messages.error(request, "Article est introuvale !!")
 
-        #client = Client.objects.get(id=client_id)
+            # client = Client.objects.get(id=client_id)
+        if not panierId:
+            messages.error(request, "Veuillez selectionnez le panier avant de cliquer le boutton Panier +!!")
+            return  redirect("articlePanier")
+        try:
+            panier = get_object_or_404(Panier, id=int(panierId), valide=False)
+        except ValueError:
+            messages.error(request, "ID de panier invalide.")
+            return redirect('articlePanier')
 
-        panier = Panier.objects.get(id=panierId, valide=False)
+        #panier = Panier.objects.get(id=panierId, valide=False)
+
 
         achat_existant = Achat.objects.filter(panier=panier, article=article).first()
 
         if achat_existant:
             if achat_existant.quantite + quantite > article.stock:
-                return JsonResponse({"success": False, "message": "Stock insuffisant"}, status=400)
+                #return JsonResponse({"success": False, "message": "Stock insuffisant"}, status=400)
+                messages.error(request,
+                               f"Le stock est insuffisant. Veuillez ajouter du stock !! Ou soit diminué la quantité d'achat")
+            else:
 
-            achat_existant.quantite += quantite
-            achat_existant.prixAchat = achat_existant.quantite * article.prixUnitaire
-            achat_existant.save()
+
+                achat_existant.quantite += quantite
+                achat_existant.prixAchat = achat_existant.quantite * article.prixUnitaire
+                achat_existant.save()
+
+                article.stock -= quantite
+                article.save()
+                panier.calculeTotal()
+                messages.success(request, f"La quantité d'achat de {article.nom} est bien augmenté au panier {panier.numero}")
+
         else:
             if quantite > article.stock:
-                return JsonResponse({"success": False, "message": "Stock insuffisant"}, status=400)
+               #return JsonResponse({"success": False, "message": "Stock insuffisant"}, status=400)
+                messages.error(request, f"Le stock est insuffisant. Veuillez ajouter du stock !! Ou soit diminué la quantité d'achat")
+            else:
+                Achat.objects.create(
+                    panier=panier,
+                    article=article,
+                    quantite=quantite,
+                    prixAchat=quantite * article.prixUnitaire
+                )
 
-            Achat.objects.create(
-                panier=panier,
-                article=article,
-                quantite=quantite,
-                prixAchat=quantite * article.prixUnitaire
-            )
+
+                article.stock -= quantite
+                article.save()
+                panier.calculeTotal()
+                messages.success(request, f"{article.nom} est bien ajouté au panier {panier.numero}")
 
 
-        article.stock -= quantite
-        article.save()
 
-        panier.calculeTotal()
 
-        messages.success(request, f"{article.nom} est bien ajouté au panier {panier.client.nomClient}")
-        return redirect('listeArticle')
+        return redirect('articlePanier')
 
 def panier_view(request):
     clients = Client.objects.all()
@@ -459,19 +517,38 @@ def newPanier(request):
         formPanier = PanierForm(request.POST)
 
         if formPanier.is_valid():
+
+
             client = formPanier.cleaned_data['client']
+            date = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            NouveauNomClient = formPanier.cleaned_data['NouveauNomClient']
+            NouveauTelephoneClient = formPanier.cleaned_data['NouveauTelephoneClient']
+            if client :
+                panier = Panier(client=client, dateCreation=date)
+                panier.save()
+                messages.success(request, f"Panier de {client.nomClient} est crée avec succès")
 
-            #NouveauNomClient = formPanier.cleaned_data['NouveauNomClien']
-            #NouveauTelephoneClient = formPanier.cleaned_data['NouveauTelephoneClient']
-            #if NouveauNomClient :
-                #Client.objects.C
-                #client = Client(nomClient=NouveauNomClient, Telephone=NouveauTelephoneClient)
-                #client.save()
 
-            panier = Panier(client=client)
-            panier.save()
-            messages.success(request, f"Panier de {client.nomClient} est crée avec succès")
-            return redirect('listeArticle')
+            elif NouveauNomClient and NouveauTelephoneClient :
+
+                client = Client(nomClient=NouveauNomClient, telephone=NouveauTelephoneClient)
+                client.save()
+
+                panier = Panier(client=client, dateCreation=date)
+                panier.save()
+                messages.success(request, f"Panier de {client.nomClient} est crée avec succès")
+
+
+            else:
+                panier = Panier(dateCreation=date)
+                panier.save()
+                messages.success(request, f"Panier de numéro {panier.numero} est crée avec succès")
+
+
+
+            return redirect('articlePanier')
+
+            #return redirect('listeArticle')
 
     else:
         formPanier = PanierForm()
@@ -487,6 +564,16 @@ def listePanierNonValide(request):
 
     return render(request, 'listeArticle.html', context)
 """
+
+
+#Vue menant vers la page permettant d'ajouter les articles au panier
+def articlePanier(request):
+
+    paniers = Panier.objects.filter(valide=False)
+    articles = Article.objects.all()
+    context = {'articles': articles, 'paniers': paniers, }
+    return render(request, 'articlePanier.html', context)
+
 def panierNonValide(request):
     paniersEnCours = Panier.objects.filter(valide=False).prefetch_related("achatClient__article")
 
@@ -558,6 +645,18 @@ def listeTransaction(request):
 
     return render(request, "listeTransatcion.html", context)
 
+def modifierTransation(request, id):
+    pass
+
+
+def supprimerTransation(request, id):
+    if request.method == 'GET':
+        trans = get_object_or_404(Transactions, id=id)
+        trans.delete()
+        messages.success(request, f"Suppression du transation a été éffectué avec  avec succès")
+        return redirect('listeTransaction')
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
 
 
 
@@ -565,8 +664,11 @@ def listeTransaction(request):
 
 def genererFacture(request, panier_id):
     panier = get_object_or_404(Panier, id=panier_id)
+    facture = Facture(panier=panier)
+
     response = HttpResponse(content_type='application/pdf')
-    numero_facture = f"FACT-{datetime.datetime.now().strftime('%Y%m%d')}-{panier.id:03d}"
+    #numero_facture = f"FACT-{panier.dateCreation.strftime('%Y%m%d')}-{panier.id:05d}"
+    numero_facture = f"FACT-{panier.numero}"
     response['Content-Disposition'] = f'attachment; filename="{numero_facture}.pdf"'
 
     doc = SimpleDocTemplate(response, pagesize=A4)
@@ -623,7 +725,15 @@ def genererFacture(request, panier_id):
     elements.append(Spacer(1, 12))
 
     # Infos du client
-    elements.append(Paragraph(f"<b>Client :</b> {panier.client.nomClient} -- Tel : {panier.client.telephone}", styles['Normal']))
+    if panier.client:  # Vérifie que le client existe
+        if panier.client.nomClient:
+            elements.append(Paragraph(f"<b>Client :</b> {panier.client.nomClient} -- Tel : {panier.client.telephone}",
+                                      styles['Normal']))
+        else:
+            elements.append(Paragraph("<b>Client :</b> Information manquante", styles['Normal']))
+    else:
+        elements.append(Paragraph("<b>Client :</b> Non spécifié", styles['Normal']))
+
     elements.append(Paragraph(f"<b>Date et Heure :</b> {panier.dateCreation.strftime('%d/%m/%Y %H:%M:%S')}", styles['Normal']))
     elements.append(Spacer(1, 20))
 
@@ -637,7 +747,8 @@ def genererFacture(request, panier_id):
         data.append([achat.article.nom, achat.quantite, achat.article.prixUnitaire, total_article])
         total += total_article
 
-    data.append(["", "", "Total :", total])
+    #data.append(["", "", "Total :", total])
+
 
     table = Table(data, colWidths=[200, 80, 100, 100])
     style = TableStyle([
@@ -652,9 +763,53 @@ def genererFacture(request, panier_id):
     table.setStyle(style)
     elements.append(table)
     elements.append(Spacer(1, 20))
+    elements.append(Paragraph(f'<font color="black"> <b> Total Achat :  {total} CFFA </b> </font>',styles['Title']))
+    elements.append(Spacer(1,20))
 
     # Signature électronique
     elements.append(Paragraph("Signature du vendeur: ________________________", styles['Normal']))
 
     doc.build(elements)
     return response
+
+
+
+
+
+def ajoutStock(request, id):
+    article = get_object_or_404(Article, id=id)
+    if request.method == "POST":
+
+        stock = int(request.POST.get("Stock"))
+
+        article.stock = article.stock + stock
+        article.save()
+
+        messages.success(request, f"Le stock de {article.nom} est augmenté à {stock}")
+
+        return redirect('listeArticle')
+    else:
+        messages.error(request, "Une erreur s'est survenue, le stock n'a pu ajouter . Réessayez plus tard !!")
+
+
+
+def modifierAchat(request):
+    pass
+
+def supprimerAchat(request, id):
+
+    if request.method == 'GET':
+        achat = get_object_or_404(Achat, id=id)
+        achat.delete()
+        messages.success(request, f"Suppression de l'achat a été éffectué avec  avec succès")
+        return redirect('listePanier')
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
+
+
+def staticJour(request):
+    achats = Achat.objects.filter(dateCommande=datetime.datetime.now().strftime("%d"))
+
+
+
+

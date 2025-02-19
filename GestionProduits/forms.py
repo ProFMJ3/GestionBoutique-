@@ -33,13 +33,13 @@ class ArticleForm(forms.Form):
     nom = forms.CharField(label="Nom du produit :", max_length=128, required=True, widget=forms.TextInput(attrs={
         'placeholder': 'Entrez le nom du produit',
     }))
-    image = forms.ImageField(label="Vous pouvez ajouter une image du produit :", required=True,
+    image = forms.ImageField(label="Vous pouvez ajouter une image du produit :", required=False,
                              widget=forms.ClearableFileInput(attrs={
                                  'accept': 'image/*',
 
                              }))
     prixUnitaire = forms.DecimalField(label="Prix Unitaire du produit :", initial=0, required=True,
-                                    widget=forms.TextInput(attrs={
+                                    widget=forms.NumberInput(attrs={
                                         'placeholder': 'Entrez le prix du produit',
                                     }))
 
@@ -100,9 +100,19 @@ class ClientForm(forms.Form):
 
 class PanierForm(forms.Form):
 
-    client = forms.ModelChoiceField(label="Selectionnez le client", required=True, queryset = Client.objects.all())
-    #NouveauNomClient = forms.CharField(label="Entrez le nom du client s'il n'existe pas ")
-    #NouveauTelephoneClient = forms.CharField(label="Entrez le contact du nouveau client ")
+    client = forms.ModelChoiceField(label="Selectionnez le client", required=False, queryset = Client.objects.all())
+    NouveauNomClient = forms.CharField(label="Entrez le nom du client s'il n'existe pas(Optionnel) ", required=False, widget=forms.TextInput(attrs={
+                                   'placeholder': "Ce champ sera remplir a cas où le nom du client dans la liste"
+
+                               }))
+    NouveauTelephoneClient = forms.CharField(label="Entrez le contact du nouveau client (Optionnel) ",  required= False, widget= forms.TextInput(attrs={
+                                   'placeholder': 'Ex : +22879405199 .Ce champ peut être rempli quand celui du nom est rempli',
+
+                               }))
+
+
+
+
 
 
 
@@ -137,7 +147,7 @@ class TransactionForm(forms.Form):
                                 }))
 
     montant = forms.DecimalField(label="Montant :", required=False,
-                                widget=forms.TextInput(attrs={
+                                widget=forms.NumberInput(attrs={
                                     'placeholder': 'Ex : 100000',
                                     'class': 'form-control',
                                 }))

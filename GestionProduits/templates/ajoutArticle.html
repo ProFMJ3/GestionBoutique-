@@ -16,7 +16,7 @@
 
         .content{
             flex-direction: column;
-            background-color: lightgray;
+            background-color: lightblue;
             border:10px solid white;
             border-radius: 15px;
             margin: 20px auto 10px;
@@ -48,6 +48,20 @@
             font-family: "Times News romans", sans-serif;
             font-weight: bold;
             color:black;
+        }
+        .alert-danger{
+            margin: 5px auto 10px;
+            background-color: wheat;
+            border-radius: 10px;
+        }
+        .error-message{
+            margin-left: 20px;
+            align-items: center;
+            font-family: "Times News romans", sans-serif;
+            color:red;
+            font-weight: bold;
+
+
         }
 
 
@@ -110,13 +124,7 @@
                 <div class="btn-acceuil">
                     <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
                 </div>
-                <div class="message">
-                    {% if messages %}
-                    {% for message in messages %}
-                        <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
-                    {% endfor %}
-                    {% endif %}
-                </div>
+
 
                 <div class="btn-liste">
                     <a href=" {% url "listeArticle" %} " class="btn btn-primary">Liste Article</a>
@@ -126,9 +134,33 @@
 
         <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
 
-            <marquee behavior="" direction=""><h2>NOUVELLE ARTICLE</h2></marquee>
+
+            <h2>NOUVEL ARTICLE</h2>
+                {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                 {% endif %}
+
             {% csrf_token %}
-            {{ formArticle }}
+
+                {% for field in formArticle %}
+
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }} <!-- Champ du formulaire -->
+
+                        <!-- Affichage des erreurs spécifiques au champ -->
+                        {% if field.errors %}
+                            <div class="alert-danger">
+                                {% for error in field.errors %}
+                                    <p class=" error-message " >{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                {% endfor %}
 
             <div class="center">
                 <button type="submit" class="btn btn-primary">Ajouter Article</button>

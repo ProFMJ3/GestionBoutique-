@@ -7,14 +7,19 @@ urlpatterns = [
     path('acceuil/', views.acceuil, name='acceuil'),
 
     #URL MENANT VERS LE DASHBOARD
-    path('dash/', views.dash, name='dash'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+
+    #URL de la vue articlePanier
+    path('articlePanier/', views.articlePanier, name='articlePanier'),
 
 # URL MENANT VERS LE FORMULAIRE D'AJOUT DE CATEGORIE
     path('ajoutCategorie/', views.ajoutCategorie, name='ajoutCategorie'),
 
 # URL MENANT VERS LE FORMULAIRE D'AJOUT DES CLIENTS
     path('ajoutArticle/', views.ajoutArticle, name='ajoutArticle'),
-    path('ajoutStock/', views.ajoutStock, name='ajoutStock'),
+
+    #URL utilisant views ajoutStock permettant d'amenter le stock d'un article
+    path('ajoutStock/<int:id>', views.ajoutStock, name='ajoutStock'),
 
     path('ajoutClient/', views.ajoutClient, name='ajoutClient'),
 

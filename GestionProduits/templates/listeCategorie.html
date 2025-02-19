@@ -29,6 +29,7 @@
             background-color: #f9f9f9;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: 0.8s;
+            min-height: 400px;
 
         }
         .product-card:hover{
@@ -46,6 +47,10 @@
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
+        }
+        .product-card .rien{
+            height: 180px;
+
         }
         .btn {
             font-family: "Times New Roman", sans-serif;
@@ -130,7 +135,9 @@
                             {% endcomment %}
                             <a href="{% url 'categorieArticle' categorie.id %}"><img src="{{ categorie.image.url }}" alt="Image de {{ categorie.titre }}" style="max-width: 200px; max-height: 150px;" class="product-image justify-content-center"></a>
                             {% else %}
+                            <div class="rien">
                             <p><em>Aucune image disponible</em></p>
+                            </div>
                         {% endif %}
                     </div>
 
@@ -142,7 +149,8 @@
                 </div>
             </div>
             {% empty %}
-            <p class="text-center">Aucune Catégorie n'a été ajouté pour le moment.</p>
+
+                <p class="text-center"> <em> Aucune Catégorie n'a été ajouté pour le moment. </em> </p>
             {% endfor %}
         </div>
     </div>
