@@ -4,19 +4,25 @@ from django.http import HttpResponse
 from django.contrib import messages
 from reportlab.lib.colors import black
 from django.db.models import Sum
+import matplotlib.pyplot as plt
+import io
+import urllib
+import base64
+from datetime import  timedelta
+from  django.utils import  timezone
 
 from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm, PanierForm, TransactionForm
 
 from .models import Categorie, Article, Client, Panier, Achat,Transactions, Facture
 from  django.db.models import Count
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse
+
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
-from django.conf import settings
+
 import os
 import datetime
 
@@ -39,13 +45,31 @@ def dashboard(request):
     # Optimisation de la somme des ventes
     totalVente = paniers.aggregate(Sum('totalAchat'))['totalAchat__sum'] or 0
 
+    """
+        Vue qui affiche le tableau de bord avec la courbe des ventes et les ventes récentes.
+        
+        
+        """
+
+    ventes = ventesParPeriode()
+    #articles_ventes = artilesLesPlusPendus()
+
     context = {
         "totalArticle": totalArticle,
         "totalVente": totalVente,
         "totalPV": totalPV,
         "totalPN": totalPN,
-        'totalAchat': totalAchat
+        'totalAchat': totalAchat,
+        'ventes_aujourdhui': ventes['ventes_aujourdhui'],
+        'ventes_mois_precedent': ventes['ventes_mois_precedent'],
+        'ventes_semaine_derniere': ventes['ventes_semaine_derniere'],
+        #'articles_ventes': articles_ventes,
+
+
+
     }
+
+
 
     return render(request, 'dash.html', context)
 
@@ -807,9 +831,42 @@ def supprimerAchat(request, id):
         return HttpResponse("Méthode non autorisée", status=405)
 
 
-def staticJour(request):
-    achats = Achat.objects.filter(dateCommande=datetime.datetime.now().strftime("%d"))
+
+
+def ventesParPeriode():
+    today = timezone.now()
+
+    # Total des ventes aujourd'hui
+    ventes_aujourdhui = \
+    Panier.objects.filter(dateCreation__date=today.date(), valide=True).aggregate(Sum('totalAchat'))[
+        'totalAchat__sum'] or 0
+
+    # Ventes du mois dernier
+    debut_mois_precedent = today.replace(day=1) - timedelta(days=1)
+    debut_mois_precedent = debut_mois_precedent.replace(day=1)
+    ventes_mois_precedent = \
+    Panier.objects.filter(dateCreation__gte=debut_mois_precedent, dateCreation__lt=today.replace(day=1),
+                          valide=True).aggregate(Sum('totalAchat'))['totalAchat__sum'] or 0
+
+    # Ventes de la semaine dernière
+    debut_semaine_derniere = today - timedelta(days=today.weekday() + 7)  # Lundi de la semaine dernière
+    fin_semaine_derniere = debut_semaine_derniere + timedelta(days=6)  # Dimanche de la semaine dernière
+    ventes_semaine_derniere = \
+    Panier.objects.filter(dateCreation__gte=debut_semaine_derniere, dateCreation__lte=fin_semaine_derniere,
+                          valide=True).aggregate(Sum('totalAchat'))['totalAchat__sum'] or 0
 
 
 
+    return {
+        'ventes_aujourdhui': ventes_aujourdhui,
+        'ventes_mois_precedent': ventes_mois_precedent,
+        'ventes_semaine_derniere': ventes_semaine_derniere,
 
+    }
+
+
+
+def artilesLesPlusPendus():
+    articles = Article.objects.annotate(total_ventes=Sum('achat__prixAchat')).filter(total_ventes__gt=0).order_by('-total_ventes')[:5]
+    articles_ventes = [(article.nom, article.total_ventes or 0) for article in articles]
+    return articles_ventes
