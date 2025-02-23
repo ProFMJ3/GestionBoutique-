@@ -130,7 +130,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for achat in   achats %}
+                {% for achat in achats %}
                     <tr>
                         <td>{{ achat.client }}  </td>
                         <td>{{ achat.article.nom }} </td>
@@ -140,9 +140,9 @@
                         <td>{{ achat.dateCommande }} </td>
 
                         <td class="text-center" >
-                            <a href="{% url 'modifierClient' achat.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
+                            <a href="{% url 'modifierAchat' achat.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
 
-                            <a href="{% url 'supprimerClient' achat.id %}" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
+                            <a href="{% url 'supprimerAchat' achat.id %}" onclick="return confirm('Voulez-vous supprimer cet achat ? Ca va être supprimer dans le panier aussi .');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
                         </td>
                     </tr>
                 {% empty %}

@@ -51,9 +51,11 @@ urlpatterns = [
     path("panier_view/", views.panier_view, name="panier_view"),
     path("listePanier/", views.listePanier, name="listePanier"),
     path("listeAchat/", views.listeAchat, name="listeAchat"),
+    path("modifierAchat/<int:id>/", views.modifierAchat, name="modifierAchat"),
+    path("supprimerAchat/<int:id>", views.supprimerAchat, name="supprimerAchat"),
+
 
     path("newPanier/", views.newPanier, name="newPanier"),
-
     path("panierNonValide/", views.panierNonValide, name="panierNonValide"),
     path("validePanier/<int:id>", views.validerPanier, name="validePanier"),
 
@@ -64,6 +66,9 @@ urlpatterns = [
     path("ajoutTransaction/", views.ajoutTransaction, name="ajoutTransaction"),
 
     path('listeTransaction/',views.listeTransaction, name='listeTransaction'),
+    path('supprimerTransaction/<int:id>',views.supprimerTransaction, name='supprimerTransaction'),
+
+path("modifierTransaction/<int:id>", views.modifierTransaction, name="modifierTransaction"),
 
 
 ]

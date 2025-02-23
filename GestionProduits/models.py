@@ -205,9 +205,13 @@ class Panier(models.Model):
     #Fonction pour calculer le total des achats
     def calculeTotal(self):
         """ Calcule et mis à jour le total des achats dU panier """
-        total = sum(achat.quantite * achat.article.prixUnitaire for achat in self.achatClient.all())
-        self.totalAchat = total  # Stocke le total dans le champ totalAchat
-        self.save()  # Enregistre la mise à jour dans la base de données
+        #total = sum(achat.quantite * achat.article.prixUnitaire for achat in self.achatClient.all())
+        #self.totalAchat = total  # Stocke le total dans le champ totalAchat
+        #self.save()  # Enregistre la mise à jour dans la base de données
+
+        total = self.achatClient.all().aggregate(totalAchat=models.Sum('prixAchat'))['totalAchat'] or 0.0
+        self.totalAchat = total
+        self.save()
 
 
         return self.totalAchat  # Retourne la valeur mise à jour
@@ -232,7 +236,7 @@ class Panier(models.Model):
     def __str__(self):
         status = "Validé" if self.valide else "En cours"
         #return f"Panier de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M')} - {status} - Total : {self.totalAchat}FCFA"
-        return f"Panier de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M:%S')} - Total : {self.totalAchat}FCFA"
+        return f"Panier {self.numero} de {self.client.nomClient} - {self.dateCreation.strftime('%Y-%m-%d %H:%M:%S')} - Total : {self.totalAchat}FCFA"
 
 
 
@@ -259,13 +263,16 @@ class Achat(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if self.article and self.quantite:
-        #Calcule le prix total de l'achat en fonction du prix unitaire de l'article.
+        # S'assurer que l'article et la quantité existent avant de calculer le prix
+        if self.article and self.quantite and self.quantite > 0:
+            # Calcule le prix total de l'achat en fonction du prix unitaire de l'article
             self.prixAchat = self.quantite * self.article.prixUnitaire
-        super().save(*args, **kwargs)
+        else:
+            raise ValueError("L'article ou la quantité n'est pas valide.")  # Gérer le cas où la quantité est invalide
 
+        super().save(*args, **kwargs)  # Appeler le save() de la classe parente
 
-        #Ajout du prix d'achat au total d'achat du panier au panier
+        # Mise à jour du total d'achat du panier
         self.panier.calculeTotal()
 
 

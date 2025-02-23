@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import TextInput
 
-from .models import Categorie, Client
+from .models import Categorie, Client, Article
 import  re
 
 
@@ -151,6 +151,30 @@ class TransactionForm(forms.Form):
                                     'placeholder': 'Ex : 100000',
                                     'class': 'form-control',
                                 }))
+
+class AchatForm(forms.Form):
+    article = forms.ModelChoiceField(label="Selectionnez l'article", required=True, queryset=Article.objects.all(), widget=forms.Select(attrs={
+                'class':'form-control',})
+    )
+
+    quantite = forms.IntegerField(label="La quantité ",
+                                                 required=True, widget=forms.TextInput(attrs={
+                'class':'form-control',
+            }))
+
+    def clean_quantite(self):
+        quantite = self.cleaned_data.get('quantite')
+        article = self.cleaned_data.get('article')
+
+        if article and quantite:
+            # Vérifiez si la quantité dépasse le stock disponible
+            if quantite > article.stock:
+                raise forms.ValidationError(
+                    f"Attention ❌🚫!! Le stock est insuffissant pour cet article. Stock disponible : {article.stock}.")
+
+        return quantite
+
+
 
 
 

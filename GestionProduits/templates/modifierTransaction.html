@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMJShop-UPDATE</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+      <style>
+        body{
+            font-family: "Times News romans", sans-serif;
+        }
+        .w-50{
+            width: 50%;
+        }
+
+        .content{
+            flex-direction: column;
+            background-color: lightgray;
+            border:10px solid white;
+            border-radius: 15px;
+            margin: 20px auto 10px;
+        }
+
+        input, textarea, select{
+            margin: auto;
+            border-radius: 10px;
+            width:80%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+        }
+        input:focus, textarea:focus{
+            border-color: blue;
+            outline: none;
+        }
+
+        textarea{
+            resize:none;
+        }
+        label{
+            margin: auto;
+            padding: 10px;
+            align-items: center;
+            font-family: "Times News romans", sans-serif;
+            font-weight: bold;
+            color:black;
+        }
+
+
+
+        .center{
+            margin-top: 20px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+
+        }
+
+        h2{
+            margin-top: 20px;
+            text-align: center;
+            color:blue;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight:bold;
+        }
+
+        .btn-cont {
+            display: flex;
+            justify-content: space-between; /* Place les liens aux extrémités gauche et droite */
+            align-items: center;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: lightblue;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-acceuil a ,
+        .btn-liste a  {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-acceuil a:hover,
+        .btn-liste a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); /* Légère augmentation de taille au survol */
+        }
+
+
+        .message {
+            font-family: "Times New Roman", sans-serif;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            color:blue;
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: bold;
+
+        }
+
+
+
+
+
+    </style>
+</head>
+
+<body>
+
+    <form action="{% url 'modifierTransaction' trans.id %}" method="POST" enctype="multipart/form-data" >
+
+        <div class="btn-cont">
+
+                <div class="btn-acceuil">
+                    <a href="{% url "acceuil" %}" class="btn btn-primary">Acceuil</a>
+                </div>
+                <div class="message">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <marquee behavior="" direction=""><p>{{ message }}</p></marquee>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="btn-liste">
+                    <a href=" {% url "listeTransaction" %} " class="btn btn-primary">Liste Transactions</a>
+                </div>
+
+            </div>
+
+
+        <div class="content w-50 d-flex">
+
+            <h2>MODIFICATION D'UNE TRANSACTION</h2>
+
+            {% csrf_token %}
+
+
+
+            {{ formTrans }}
+
+
+            <div class="center">
+
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+
+
+            </div>
+
+        </div>
+
+    </form>
+</body>
+</html>

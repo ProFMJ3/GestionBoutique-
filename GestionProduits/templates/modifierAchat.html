@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMJShop-AJOUT</title>
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <style>
+        body{
+            font-family: "Times New Roman", sans-serif;
+
+        }
+
+        .w-50{
+            width: 50%;
+            font-family: "Times New Roman", sans-serif;
+        }
+
+        .content{
+            flex-direction: column;
+            background-color: lightgray;
+            border:10px solid white;
+            border-radius: 15px;
+            margin: 20px auto 10px;
+            font-family: "Times New Roman", sans-serif;
+        }
+
+        input, textarea, select, option{
+            margin: auto;
+            border-radius: 10px;
+            width:80%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+            font-family: "Times New Roman", sans-serif;
+        }
+
+        input:focus, textarea:focus, select:focus{
+            border-color: blue;
+            outline: none;
+        }
+
+        textarea{
+            resize:none;
+        }
+
+        label{
+            margin: auto;
+            padding: 10px;
+            align-items: center;
+            font-family: "Times News romans", sans-serif;
+            font-weight: bold;
+            color:black;
+        }
+
+
+        .center{
+            margin-top: 20px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+
+        }
+        h2{
+            margin-top: 10px;
+            text-align: center;
+            color:blue;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight:bold;
+        }
+        .btn-cont {
+            display: flex;
+            justify-content: space-between; /* Place les liens aux extrémités gauche et droite */
+            align-items: center;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: lightblue;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-acceuil a ,
+        .btn-liste a  {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-acceuil a:hover,
+        .btn-liste a:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); /* Légère augmentation de taille au survol */
+        }
+        .message{
+            color: #0a53be;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <form action=" {% url 'modifierAchat' achat.id %} " method="POST" enctype="multipart/form-data" >
+
+        <div class="btn-cont">
+
+                <div class="btn-acceuil">
+                    <a href=" {% url "acceuil" %} " class="btn btn-primary">Acceuil</a>
+                </div>
+
+
+                <div class="btn-liste">
+                    <a href=" {% url "listeAchat" %} " class="btn btn-primary">Liste des achats</a>
+                </div>
+
+            </div>
+
+        <div class="content d-flex  justify-content-center fd-column w-50 m-auto">
+
+
+            <marquee behavior="" direction=""><h2>MODIFICATION D'ACHAT</h2></marquee>
+            {% csrf_token %}
+            <h5 class="text-center" >Panier {{ achat.panier.numero }}</h5>
+
+            {% for field in formAchat %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }} <!-- Champ du formulaire -->
+
+                        <!-- Affichage des erreurs spécifiques au champ -->
+                        {% if field.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in field.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+            <div class="center">
+                <button type="submit" class="btn btn-outline-warning">Mettre à Jour</button>
+
+            </div>
+
+        </div>
+
+    </form>
+</body>
+</html>

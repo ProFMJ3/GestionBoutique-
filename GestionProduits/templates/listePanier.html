@@ -135,11 +135,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Article</th>
-                    <th>Quantité</th>
-                    <th>Prix Unitaire</th>
-                    <th>Total</th>
-                    <th>Action</th>
+                    <th>ARTICLE</th>
+                    <th>QUANTITE</th>
+                    <th>PRIX UNITAIRE</th>
+                    <th>PRIX ACHAT</th>
+                    <th>ACTION</th>
                 </tr>
             </thead>
             <tbody>
@@ -150,8 +150,8 @@
                         <td>{{ achat.article.prixUnitaire }} FCFA</td>
                         <td>{{ achat.prixAchat }} FCFA</td>
                         <td class="text-center" >
-                            <a href="#" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
-                            <a href="#" onclick="return confirm('Voulez-vous supprimer le client ?');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
+                            <a href="{% url 'modifierAchat' achat.id %}" class="btn btn-warning"><i class="fas fa-edit" ></i></a>
+                            <a href="{% url 'supprimerAchat' achat.id %}" onclick="return confirm('Voulez-vous supprimer cet achat ? Ca va être supprimer dans le panier aussi .');"  class="btn btn-danger"> <i class="fas fa-trash" > </i> </a>
                         </td>
                     </tr>
                 {% empty %}

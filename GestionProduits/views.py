@@ -11,7 +11,7 @@ import base64
 from datetime import  timedelta
 from  django.utils import  timezone
 
-from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm, PanierForm, TransactionForm
+from .forms import CategorieForm, ArticleForm, ArticleFormM, ClientForm, PanierForm, TransactionForm, AchatForm
 
 from .models import Categorie, Article, Client, Panier, Achat,Transactions, Facture
 from  django.db.models import Count
@@ -535,6 +535,58 @@ def listeAchat(request):
 
     return render(request, "listeAchat.html", context)
 
+
+
+#Views pour modifier
+def modifierAchat(request, id):
+
+    #Récupération de la ligne dans la table
+    achat = get_object_or_404(Achat, id=id)
+
+
+    if request.method == "POST":
+
+        formAchat = AchatForm(request.POST)
+
+        if formAchat.is_valid():
+
+            achat.article =formAchat.cleaned_data['article']
+            achat.quantite = int(formAchat.cleaned_data['quantite'])
+            # Recalculer le prix d'achat en fonction de la nouvelle quantité
+            achat.prixAchat = achat.quantite * achat.article.prixUnitaire
+
+            achat.save()
+            messages.success(request, f"Mis à jour de l'achat du {achat.panier.numero}!")
+            return redirect('listePanier')  # Redirection vers la page de liste des catégories
+
+
+
+    else:
+        formAchat = AchatForm(initial={
+            'article': achat.article,
+            'quantite': achat.quantite,
+
+        })
+    return render(request, 'modifierAchat.html', {'formAchat': formAchat, 'achat':achat})
+
+
+
+def supprimerAchat(request, id):
+    if request.method == 'GET':
+        achat = get_object_or_404(Achat, id=id)
+        panier = achat.panier  # Récupérer le panier li
+        # é à cet achat
+        achat.delete()  # Supprimer l'achat
+
+        # Mettre à jour le total du panier après la suppression
+        panier.calculeTotal()
+
+        messages.success(request, f"Suppression d'achat du panier {achat.panier.numero} a été éffectué avec succès ")
+        return redirect('listePanier')
+    else:
+        return HttpResponse("Méthode non autorisée", status=405)
+
+
 #Créer un nouveau panier
 def newPanier(request):
     if request.method == "POST":
@@ -669,11 +721,48 @@ def listeTransaction(request):
 
     return render(request, "listeTransatcion.html", context)
 
-def modifierTransation(request, id):
-    pass
+def modifierTransaction(request, id):
 
 
-def supprimerTransation(request, id):
+
+
+
+        #Récuperation de la ligne dans la table catégorie
+    trans = get_object_or_404(Transactions, id=id)
+
+    if request.method == "POST":
+
+
+        formTrans = TransactionForm(request.POST)
+
+        if formTrans.is_valid():
+
+            trans.montant = formTrans.cleaned_data['montant']
+            trans.prixUnitaire = formTrans.cleaned_data['telephone']
+            trans.operateur = formTrans.cleaned_data['operateur']
+
+            trans.operation = formTrans.cleaned_data['operation']
+
+            trans.save()
+            messages.success(request, f"Mis à jour de transaction {trans.operateur} de {trans.montant} !!")
+            return redirect('listeTransaction')  # Redirection vers la page de liste des produits
+        else:
+            for field, errors in formTrans.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+
+    else:
+        formTrans = TransactionForm(initial={
+            'montant': trans.montant,
+            'telephone': trans.telephone,
+            'operateur': trans.operateur,
+            'operation': trans.operation,
+            })
+        return render(request, 'modifierTransaction.html', {'formTrans': formTrans, 'trans':trans })
+
+
+
+def supprimerTransaction(request, id):
     if request.method == 'GET':
         trans = get_object_or_404(Transactions, id=id)
         trans.delete()
@@ -817,10 +906,10 @@ def ajoutStock(request, id):
 
 
 
-def modifierAchat(request):
-    pass
-
-def supprimerAchat(request, id):
+#def modifierAchat(request, id):
+ #   pass
+"""
+def supprimerAchat(request):
 
     if request.method == 'GET':
         achat = get_object_or_404(Achat, id=id)
@@ -830,7 +919,7 @@ def supprimerAchat(request, id):
     else:
         return HttpResponse("Méthode non autorisée", status=405)
 
-
+"""
 
 
 def ventesParPeriode():
