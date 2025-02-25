@@ -105,10 +105,10 @@ class PanierForm(forms.Form):
                                    'placeholder': "Ce champ sera remplir a cas où le nom du client dans la liste"
 
                                }))
-    NouveauTelephoneClient = forms.CharField(label="Entrez le contact du nouveau client (Optionnel) ",  required= False, widget= forms.TextInput(attrs={
-                                   'placeholder': 'Ex : +22879405199 .Ce champ peut être rempli quand celui du nom est rempli',
+    #NouveauTelephoneClient = forms.CharField(label="Entrez le contact du nouveau client (Optionnel) ",  required= False, widget= forms.TextInput(attrs={
+                               #    'placeholder': 'Ex : +22879405199 .Ce champ peut être rempli quand celui du nom est rempli',
 
-                               }))
+                               #}))
 
 
 

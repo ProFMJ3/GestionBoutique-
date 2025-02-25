@@ -32,6 +32,15 @@ import datetime
 
 #LA VUE POUR AFFICHER ACCEUIL
 def acceuil(request):
+    """
+    if request.method == "POST":
+        nom = request.POST.get("article")
+
+
+        article = get_object_or_404(Panier, nom =nom)
+        context = {'article':article}
+        return  render(request, 'listeArticle.html', context)
+    """
     return render(request, 'acceuil.html')
 
 #La vue du dashboard
@@ -103,7 +112,7 @@ def ajoutCategorie(request):
     else:
         form = CategorieForm()
 
-    return render(request, 'ajoutCategorie.html', {'form': form})
+    return render(request, 'categorie/ajoutCategorie.html', {'form': form})
 
 
 
@@ -114,16 +123,11 @@ def listeCategorie(request):
     totalCategorie = categories.count()
 
     context = {"categories": categories, 'totalCategorie': totalCategorie}
-    if not categories.exists():
-        message = "Aucun produit n'est enregistré"
-        totalCategorie = 0
 
-        return render(request, 'listeCategorie.html', {"message": message}, 'totalCategorie', totalCategorie)
-
-    return render(request, 'listeCategorie.html', context)
+    return render(request, 'categorie/listeCategorie.html', context)
 
 
-# LA VUE POUR AFFICHER LES  ARTICLES POUR UNE CATEGORIE
+# LA VUE POUR AFFICHER LES ARTICLES POUR UNE CATEGORIE
 def categorieArticle(request, idCategorie):
     # categorie = Categorie.objects.filter(id =idCategorie)
     categorie = get_object_or_404(Categorie, id=idCategorie)
@@ -135,9 +139,9 @@ def categorieArticle(request, idCategorie):
         message = "Aucune article n'est enregistré"
         totalArticle = 0
 
-        return render(request, "categorieArticle.html", {"message": message, 'totalArticle': totalArticle})
+        return render(request, "categorie/categorieArticle.html", {"message": message, 'totalArticle': totalArticle})
 
-    return render(request, "categorieArticle.html", context)
+    return render(request, "categorie/categorieArticle.html", context)
 
 
 def modifierCategorie(request, idCate):
@@ -171,7 +175,7 @@ def modifierCategorie(request, idCate):
             'titre': categorie.titre,
             'description': categorie.description,
         })
-    return render(request, 'modifierCategorie.html', {'formCategorie': formCategorie, 'categorie': categorie})
+    return render(request, 'categorie/modifierCategorie.html', {'formCategorie': formCategorie, 'categorie': categorie})
 
 
 # LA VUE POUR SUPPRIMER UNE CATEGORIE
@@ -221,7 +225,7 @@ def ajoutArticle(request):
 
     else:
         formArticle = ArticleForm()
-    return render(request, 'ajoutArticle.html', {'formArticle': formArticle})
+    return render(request, 'article/ajoutArticle.html', {'formArticle': formArticle})
 
 #LA VUE POUR AFFICHER LES ARTICLES
 def listeArticle(request):
@@ -229,10 +233,16 @@ def listeArticle(request):
     #total = articles.count()
     #paniers = Panier.objects.filter(valide=False)
 
+    if request.method == "POST":
+        nom = request.POST.get("article", "").strip()  # Récupérer le nom et enlever les espaces
+
+        if nom:
+            articles = Article.objects.filter(nom__icontains=nom)  # Recherche insensible à la casse
+
     context = {"articles": articles}
 
 
-    return render(request, "listeArticle.html", context)
+    return render(request, "article/listeArticle.html", context)
 
 def articles(request):
     articles = Article.objects.all()
@@ -243,9 +253,9 @@ def articles(request):
         message = "Aucune article n'est enregistré"
         total =0
 
-        return render(request, "articles.html", {"message": message, 'total':total})
+        return render(request, "article/articles.html", {"message": message, 'total':total})
 
-    return render(request, "articles.html", context)
+    return render(request, "article/articles.html", context)
 
 """
 def ajoutStock(request, idArticle):
@@ -313,7 +323,7 @@ def modifierArticle(request, idArticle):
             'categorie': article.categorie,
             'stock': article.stock,
         })
-    return render(request, 'modifierArticle.html', {'formArticle': formArticle, 'article':article })
+    return render(request, 'article/modifierArticle.html', {'formArticle': formArticle, 'article':article})
 
 
 #LA VUE POUR SUPPRIMER UN ARTICLE
@@ -358,7 +368,7 @@ def ajoutClient(request):
     else:
         formClient = ClientForm()
 
-    return render(request, 'ajoutClient.html', {'formClient': formClient})
+    return render(request, 'client/ajoutClient.html', {'formClient': formClient})
 
 
 #Client 
@@ -371,9 +381,9 @@ def listeClient(request):
         message = "Aucun client n'est enregistré"
         totalClient =0
 
-        return render(request, "listeClient.html", {"message": message, 'totalClient':totalClient})
+        return render(request, "client/listeClient.html", {"message": message, 'totalClient':totalClient})
 
-    return render(request, "listeClient.html", context)
+    return render(request, "client/listeClient.html", context)
 
 
 #Views pour modifier
@@ -408,7 +418,7 @@ def modifierClient(request, idClient):
             'adresse': client.adresse,
             'tel': client.telephone,
         })
-    return render(request, 'modifierClient.html', {'formClient': formClient, 'client':client})
+    return render(request, 'client/modifierClient.html', {'formClient': formClient, 'client':client})
 
 
 
@@ -512,7 +522,7 @@ def ajoutPanier(request):
 def panier_view(request):
     clients = Client.objects.all()
     articles = Article.objects.all()
-    return render(request, "ajoutPanier.html", {"clients": clients, "articles": articles})
+    return render(request, "panier/ajoutPanier.html", {"clients": clients, "articles": articles})
 
 def listePanier(request):
     paniers = Panier.objects.filter(valide=True)
@@ -523,9 +533,9 @@ def listePanier(request):
         message = "Aucun client n'est enregistré"
         totalPanier = 0
 
-        return render(request, "listePanier.html", {"message": message, 'totalPanier': totalPanier})
+        return render(request, "panier/listePanier.html", {"message": message, 'totalPanier': totalPanier})
 
-    return render(request, "listePanier.html", context)
+    return render(request, "panier/listePanier.html", context)
 
 def listeAchat(request):
     achats = Achat.objects.all()
@@ -533,7 +543,7 @@ def listeAchat(request):
 
     context = {"achats":  achats, 'totalAchat': totalAchat}
 
-    return render(request, "listeAchat.html", context)
+    return render(request, "achat/listeAchat.html", context)
 
 
 
@@ -567,7 +577,7 @@ def modifierAchat(request, id):
             'quantite': achat.quantite,
 
         })
-    return render(request, 'modifierAchat.html', {'formAchat': formAchat, 'achat':achat})
+    return render(request, 'achat/modifierAchat.html', {'formAchat': formAchat, 'achat':achat})
 
 
 
@@ -598,16 +608,16 @@ def newPanier(request):
             client = formPanier.cleaned_data['client']
             date = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
             NouveauNomClient = formPanier.cleaned_data['NouveauNomClient']
-            NouveauTelephoneClient = formPanier.cleaned_data['NouveauTelephoneClient']
+            #NouveauTelephoneClient = formPanier.cleaned_data['NouveauTelephoneClient']
             if client :
                 panier = Panier(client=client, dateCreation=date)
                 panier.save()
-                messages.success(request, f"Panier de {client.nomClient} est crée avec succès")
+                messages.success(request, f"Panier de {client.nomClient} de numéro {panier.numero} est crée avec succès")
 
 
-            elif NouveauNomClient and NouveauTelephoneClient :
+            elif NouveauNomClient : #and NouveauTelephoneClient :
 
-                client = Client(nomClient=NouveauNomClient, telephone=NouveauTelephoneClient)
+                client = Client(nomClient=NouveauNomClient) # telephone=NouveauTelephoneClient)
                 client.save()
 
                 panier = Panier(client=client, dateCreation=date)
@@ -629,7 +639,7 @@ def newPanier(request):
     else:
         formPanier = PanierForm()
 
-    return  render(request, 'newPanier.html', {'formPanier':formPanier})
+    return  render(request, 'panier/newPanier.html', {'formPanier':formPanier})
 """
 def listePanierNonValide(request):
 
@@ -648,16 +658,16 @@ def articlePanier(request):
     paniers = Panier.objects.filter(valide=False)
     articles = Article.objects.all()
     context = {'articles': articles, 'paniers': paniers, }
-    return render(request, 'articlePanier.html', context)
+    return render(request, 'article/articlePanier.html', context)
 
 def panierNonValide(request):
     paniersEnCours = Panier.objects.filter(valide=False).prefetch_related("achatClient__article")
 
 
     if not paniersEnCours.exists():  # Vérification correcte
-        return render(request, 'panierNonvalide.html', {'message': "Aucun panier en cours"})
+        return render(request, 'panier/panierNonvalide.html', {'message': "Aucun panier en cours"})
 
-    return render(request, 'panierNonvalide.html', {'paniersEnCours': paniersEnCours})
+    return render(request, 'panier/panierNonvalide.html', {'paniersEnCours': paniersEnCours})
 
 def validerPanier(request, id):
     panier = get_object_or_404(Panier, id=id)
@@ -711,7 +721,7 @@ def ajoutTransaction(request):
     else:
         formTransaction = TransactionForm()
 
-    return render(request, 'ajoutTransaction.html', {'formTransaction': formTransaction})
+    return render(request, 'transaction/ajoutTransaction.html', {'formTransaction': formTransaction})
 
 def listeTransaction(request):
     transactions = Transactions.objects.all()
@@ -719,7 +729,7 @@ def listeTransaction(request):
 
     context = {"transactions":  transactions, 'totalTrans': totalTrans}
 
-    return render(request, "listeTransatcion.html", context)
+    return render(request, "transaction/listeTransatcion.html", context)
 
 def modifierTransaction(request, id):
 
@@ -758,7 +768,7 @@ def modifierTransaction(request, id):
             'operateur': trans.operateur,
             'operation': trans.operation,
             })
-        return render(request, 'modifierTransaction.html', {'formTrans': formTrans, 'trans':trans })
+        return render(request, 'transaction/modifierTransaction.html', {'formTrans': formTrans, 'trans':trans})
 
 
 
@@ -954,8 +964,3 @@ def ventesParPeriode():
     }
 
 
-
-def artilesLesPlusPendus():
-    articles = Article.objects.annotate(total_ventes=Sum('achat__prixAchat')).filter(total_ventes__gt=0).order_by('-total_ventes')[:5]
-    articles_ventes = [(article.nom, article.total_ventes or 0) for article in articles]
-    return articles_ventes

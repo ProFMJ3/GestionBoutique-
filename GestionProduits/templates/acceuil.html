@@ -18,13 +18,14 @@
 
              width: 100%;
              height: 100vh;
-             background-color: lightgray;
+             background-color: white;
              border:5px solid white;
              border-radius: 15px;
              margin: auto;
              justify-content: center;
              text-align: center;
              font-family: "Times New Roman", sans-serif;
+
 
         }
          .collapse a:hover{
@@ -63,45 +64,63 @@
            }
 
           .head-content{
-              background-color: lightblue;
+              background-color: #495057;
           }
           .btn{
               font-weight: bold;
           }
+          .head-content{
+              top: 0;
+              position: sticky;
+              z-index: 100;
+          }
+
 
     </style>
 </head>
 <body>
 <header class="head-content">
-   <nav class="navbar navbar-expand-lg body-tertiary">
+   <nav class="navbar navbar-expand-lg body-tertiary ">
   <div class="container-fluid">
-    <a class="navbar-brand btn btn-primary" href="{% url 'acceuil' %}"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px" > RaïssaShop</a>
+    <a class="navbar-brand btn btn-primary" href="{% url 'acceuil' %}"> <img src="{% static 'img/log.png' %}"   alt="logo" style="width: 100px; height: 80px;" > RaïssaShop</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="nav navbar-nav me-auto mb-2 mb-lg-0 ms-3">
         <li class="nav-item">
-            <a href="{% url "listeCategorie" %}" aria-current="page" class="nav-link ">  <i class="fas fa-th-large"></i> Liste des Catégories</a>
+            <a href="{% url "listeCategorie" %}" aria-current="page" class="nav-link ">  <i class="fas fa-th-large"></i> Les Catégories</a>
 
 
         </li>
         <li class="nav-item">
-              <a href="{% url "listeArticle" %}" aria-current="page" class="nav-link"><i class="fas fa-box"></i> Liste de tous les articles</a>
+              <a href="{% url "listeArticle" %}" aria-current="page" class="nav-link"><i class="fas fa-box"></i> Les articles</a>
 
 
         </li>
           <li class="nav-item">
 
-              <a href="{% url "listeClient" %}" aria-current="page" class="nav-link"><i class="fa-solid fa-users"></i> Liste des clients</a>
+              <a href="{% url "listeClient" %}" aria-current="page" class="nav-link"><i class="fa-solid fa-users"></i> Clients</a>
 
         </li>
 
-           <li class="nav-item">
+             <li class="nav-item">
 
-              <a href="{% url "listeTransaction" %}" aria-current="page" class="nav-link"><i class="fas fa-exchange-alt"></i> Liste des transactions</a>
+              <a href="{% url "listeTransaction" %}" aria-current="page" class="nav-link"><i class="fas fa-exchange-alt"></i> Les transactions</a>
 
         </li>
+
+          <li class="nav-item">
+              <form class="d-flex m-auto " role="search" method="POST" action="{% url 'listeArticle' %}" >
+                {% csrf_token %}
+                <div class="d-flex" >
+                <input class="form-control me-2" name="article" type="search" placeholder="Filtrer article par nom"  aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+                </div>
+            </form>
+          </li>
+
+
 
 
 
@@ -117,9 +136,10 @@
         </li>
 
         <li class="nav-item">
-              <a href="{% url "dashboard" %}" aria-current="page" class="btn btn-info">Dashboard</a>
+              <a href="{% url "dashboard" %}" aria-current="page" class="btn btn-primary">Dashboard</a>
 
         </li>
+
 
 
 
@@ -133,7 +153,7 @@
 
 
 
-    <div class="content">
+    <div class="content ">
         <h2 class="" >Bienvenue Sur notre Plateforme de RaïssaShop !!</h2>
         <p class="text-center">Decouvrez vos produits, vos ventes, </p>
         <div class="d-flex panier" >

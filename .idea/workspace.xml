@@ -5,17 +5,64 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d4dce43f-4892-4dfd-b42d-5c295e0efd98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/modifierAchat.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GestionProduits/templates/modifierTransaction.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionBoutique/.env" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionBoutique/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionBoutique/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0002_alter_article_datemodification_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0003_alter_client_telephone.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0004_alter_achat_options_panier_nouveautelephoneclient_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0005_alter_client_options_alter_panier_options.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0006_rename_nouveautnomclient_panier_nouveaunomclient.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0007_remove_panier_nouveaunomclient_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0008_transactions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0009_alter_transactions_telephone.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0010_modepaiement_panier_numero.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0011_remove_facture_numero_remove_facture_prixtotalachat_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0012_remove_facture_etat_remove_modepaiement_type_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/migrations/0013_alter_modepaiement_datepaiement.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/acceuil.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeAchat.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeAchat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeTransatcion.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/listeTransatcion.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GestionProduits/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/article/ajoutArticle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/categorie/ajoutCategorie.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/client/ajoutClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutPanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/panier/ajoutPanier.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/ajoutTransaction.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/transaction/ajoutTransaction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/articlePanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/article/articlePanier.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/articles.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/article/articles.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/categorieArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/categorie/categorieArticle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/dash.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeAchat.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/achat/listeAchat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/article/listeArticle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/categorie/listeCategorie.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/client/listeClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listePanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/panier/listePanier.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/listeTransatcion.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/transaction/listeTransatcion.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/modifierAchat.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/achat/modifierAchat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/modifierArticle.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/article/modifierArticle.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/modifierCategorie.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/categorie/modifierCategorie.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/modifierClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/client/modifierClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/modifierTransaction.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/transaction/modifierTransaction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/newPanier.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/panier/newPanier.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templates/panierNonvalide.html" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templates/panier/panierNonvalide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GestionProduits/templatetags/articles_extras.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/templatetags/articles_extras.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GestionProduits/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/GestionProduits/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Untitled.mdj" beforeDir="false" afterPath="$PROJECT_DIR$/Untitled.mdj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/activites.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/activites.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/eau_s1K7y6W.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/js.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/jus-fruits.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/laitiers.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/sc.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/sco.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/tomatesC.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/v.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/v_P07uoB3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/v_RPcDLRh.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/v_Xc4VybL.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/vb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/vinsucre.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/ImagesCategories/vpetrvs.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,32 +92,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Django Server.GestionBoutique.executor&quot;: &quot;Run&quot;,
-    &quot;Python.views.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;FMJ3&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/SEMESTRE3/INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211/PROGRAMME/GestionBoutique&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.GestionBoutique.executor": "Run",
+    "Python.views.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "FMJ3",
+    "last_opened_file_path": "D:/SEMESTRE3/INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211/PROGRAMME/GestionBoutique",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;HTML&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "HTML"
     ]
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\SEMESTRE3\INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211\PROGRAMME\GestionBoutique\GestionProduits\templates\client" />
+      <recent name="D:\SEMESTRE3\INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211\PROGRAMME\GestionBoutique\GestionProduits\templates\article" />
+      <recent name="D:\SEMESTRE3\INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211\PROGRAMME\GestionBoutique\GestionProduits\templates\transaction" />
+      <recent name="D:\SEMESTRE3\INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211\PROGRAMME\GestionBoutique\GestionProduits\templates\achat" />
+      <recent name="D:\SEMESTRE3\INTRODUCTION AUX DEVELOPPEMENT D'APPLI IT211\PROGRAMME\GestionBoutique\GestionProduits\templates\panier" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="GestionBoutique" type="Python.DjangoServer" factoryName="Django server">
       <module name="GestionBoutique" />
@@ -139,6 +195,9 @@
       <workItem from="1740000497811" duration="22766000" />
       <workItem from="1740168745420" duration="603000" />
       <workItem from="1740304947911" duration="6259000" />
+      <workItem from="1740341378025" duration="11704000" />
+      <workItem from="1740471528555" duration="6137000" />
+      <workItem from="1740484135030" duration="7033000" />
     </task>
     <servers />
   </component>
